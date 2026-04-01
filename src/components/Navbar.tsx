@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Facebook, Instagram, Linkedin, Twitter, Menu, X } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Twitter, Menu, X, Phone } from 'lucide-react';
+import { motion } from 'motion/react';
 import Logo from './Logo';
 
 export default function Navbar() {
@@ -37,18 +38,69 @@ export default function Navbar() {
 
           {/* Desktop Socials */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Facebook page">
-              <Facebook size={18} />
-            </a>
-            <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Instagram page">
-              <Instagram size={18} />
-            </a>
-            <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our LinkedIn page">
-              <Linkedin size={18} />
-            </a>
-            <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Twitter page">
-              <Twitter size={18} />
-            </a>
+            <div className="flex items-center gap-4">
+              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Facebook page">
+                <Facebook size={18} />
+              </a>
+              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Instagram page">
+                <Instagram size={18} />
+              </a>
+              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our LinkedIn page">
+                <Linkedin size={18} />
+              </a>
+              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Twitter page">
+                <Twitter size={18} />
+              </a>
+            </div>
+
+            <motion.a
+              href="tel:+918108102609"
+              animate={{ y: [0, -4, 0] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="
+                relative overflow-hidden
+                flex items-center gap-3
+                px-7 py-4
+                rounded-full
+                bg-[#8CC63F]
+                text-white
+                font-semibold
+                text-lg
+                shadow-[0_10px_30px_rgba(140,198,63,0.25)]
+              "
+              aria-label="Call +91 8108102609"
+            >
+              <motion.div
+                animate={{
+                  rotate: [0, -8, 8, 0],
+                  scale: [1, 1.06, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="relative z-10"
+              >
+                <Phone size={20} />
+              </motion.div>
+
+              <span className="relative z-10">+91 8108102609</span>
+
+              <motion.div
+                className="absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                animate={{ x: ['0%', '250%'] }}
+                transition={{
+                  duration: 2.8,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+              />
+            </motion.a>
           </div>
 
           {/* Mobile Menu Toggle */}

@@ -23,7 +23,7 @@ export default function VisionMission() {
               OUR VISION
             </div>
             <h2 className="text-4xl font-bold leading-tight">
-              To become the region's most agile and trusted partner for integrated business solutions, empowering organizations to move faster, operate smarter, and grow stronger.
+              To become the region’s most agile and trusted partner for integrated business solutions—empowering organizations to move faster, operate smarter, and grow stronger.
             </h2>
             <p className="text-white/70 text-lg leading-relaxed">
               Built for Speed. Designed for Success.
@@ -43,7 +43,7 @@ export default function VisionMission() {
               OUR MISSION
             </div>
             <p className="text-white/70 text-lg leading-relaxed p-6 bg-white/5 rounded-2xl border border-white/10">
-              At Speedup Services, we accelerate business success by delivering seamless, end-to-end solutions across marketing, creative, and digital services, supported by reliable logistics, efficient facility management, and skilled manpower. We are committed to speed, quality, and innovation, helping our clients stay ahead in a rapidly evolving world.
+              At Speedup Services, we accelerate business success by delivering seamless, end-to-end solutions across marketing, creative, and digital services, supported by reliable logistics, efficient facility management, and skilled manpower. We are committed to speed, quality, and innovation—helping our clients stay ahead in a rapidly evolving world.
             </p>
           </motion.div>
         </div>

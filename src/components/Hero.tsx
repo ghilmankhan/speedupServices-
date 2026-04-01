@@ -139,7 +139,7 @@ export default function Hero() {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-[#7c7f87] text-base sm:text-lg leading-relaxed max-w-2xl mb-10"
           >
-            We Don't Just Support Business - We Speed It Up.
+            We Don’t Just Support Business—We Speed It Up.
           </motion.p>
 
           {/* CTA */}

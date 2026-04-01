@@ -465,7 +465,7 @@ export default function QuoteForm() {
           />
           <div className="absolute bottom-10 left-10 right-10 bg-primary-green/80 backdrop-blur-md p-8 rounded-2xl text-white text-center">
             <p className="text-lg font-medium mb-2">Built for Speed. Designed for Success.</p>
-            <p className="text-sm opacity-80">We Don't Just Support Business - We Speed It Up.</p>
+            <p className="text-sm opacity-80">We Don’t Just Support Business—We Speed It Up.</p>
           </div>
         </div>
       </div>
