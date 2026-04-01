@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 
 type TabId = 'facility' | 'manpower' | 'marketing';
 type CardSize = 'large' | 'wide' | 'tall' | 'small';

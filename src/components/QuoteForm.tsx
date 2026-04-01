@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GradientAnimatedButton from './GradientAnimatedButton';
 
 const servicesList = [
@@ -17,21 +17,40 @@ const servicesList = [
 ];
 
 export default function QuoteForm() {
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [serviceError, setServiceError] = useState('');
 
-  const toggleService = (service) => {
+  useEffect(() => {
+    if (!isSubmitted) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => setIsSubmitted(false), 5000);
+    return () => window.clearTimeout(timeoutId);
+  }, [isSubmitted]);
+
+  const toggleService = (service: string) => {
     setSelectedServices(prev => 
       prev.includes(service) 
         ? prev.filter(s => s !== service) 
         : [...prev, service]
     );
+    setServiceError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (selectedServices.length === 0) {
+      setServiceError('Please select at least one service.');
+      return;
+    }
+
     setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setServiceError('');
+    e.currentTarget.reset();
+    setSelectedServices([]);
   };
 
   return (
@@ -90,6 +109,11 @@ export default function QuoteForm() {
                 </button>
               ))}
             </div>
+            {serviceError && (
+              <p className="text-sm text-red-500" role="alert">
+                {serviceError}
+              </p>
+            )}
           </div>
 
           <div className="flex items-center gap-4">
