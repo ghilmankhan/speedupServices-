@@ -37,16 +37,16 @@ export default function Navbar() {
 
           {/* Desktop Socials */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors">
+            <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Facebook page">
               <Facebook size={18} />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors">
+            <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Instagram page">
               <Instagram size={18} />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors">
+            <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our LinkedIn page">
               <Linkedin size={18} />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors">
+            <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Twitter page">
               <Twitter size={18} />
             </a>
           </div>
@@ -74,16 +74,16 @@ export default function Navbar() {
               </a>
             ))}
             <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors">
+              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Facebook page">
                 <Facebook size={20} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors">
+              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Instagram page">
                 <Instagram size={20} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors">
+              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our LinkedIn page">
                 <Linkedin size={20} />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors">
+              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Twitter page">
                 <Twitter size={20} />
               </a>
             </div>

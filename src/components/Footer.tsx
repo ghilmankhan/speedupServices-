@@ -60,16 +60,16 @@ export default function Footer() {
           <div className="space-y-6">
             <h3 className="text-lg font-bold">Follow Us</h3>
             <div className="flex gap-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-primary-green hover:text-white transition-colors">
+              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary-green hover:text-white transition-colors" aria-label="Visit our Facebook page">
                 <Facebook size={20} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-primary-green hover:text-white transition-colors">
+              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary-green hover:text-white transition-colors" aria-label="Visit our Instagram page">
                 <Instagram size={20} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-primary-green hover:text-white transition-colors">
+              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary-green hover:text-white transition-colors" aria-label="Visit our LinkedIn page">
                 <Linkedin size={20} />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-primary-green hover:text-white transition-colors">
+              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary-green hover:text-white transition-colors" aria-label="Visit our Twitter page">
                 <Twitter size={20} />
               </a>
             </div>

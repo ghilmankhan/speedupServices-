@@ -19,7 +19,16 @@ const servicesList = [
 export default function QuoteForm() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [serviceError, setServiceError] = useState('');
+  const [formError, setFormError] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
 
   useEffect(() => {
     if (!isSubmitted) {
@@ -39,18 +48,83 @@ export default function QuoteForm() {
     setServiceError('');
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    setFormError('');
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFormError('');
+    setServiceError('');
+
+    if (!formData.firstName.trim()) {
+      setFormError('First name is required.');
+      return;
+    }
+
+    if (!formData.lastName.trim()) {
+      setFormError('Last name is required.');
+      return;
+    }
+
+    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setFormError('Please enter a valid email address.');
+      return;
+    }
+
+    if (!formData.phone.trim() || !/^[\d\s+\-()]+$/.test(formData.phone)) {
+      setFormError('Please enter a valid phone number.');
+      return;
+    }
+
+    if (!formData.message.trim()) {
+      setFormError('Message is required.');
+      return;
+    }
 
     if (selectedServices.length === 0) {
       setServiceError('Please select at least one service.');
       return;
     }
 
-    setIsSubmitted(true);
-    setServiceError('');
-    e.currentTarget.reset();
-    setSelectedServices([]);
+    setIsLoading(true);
+
+    try {
+      // Replace with your actual backend endpoint
+      const response = await fetch('/api/quote-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+          services: selectedServices,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({ firstName: '', lastName: '', email: '', phone: '', message: '' });
+        setSelectedServices([]);
+      } else {
+        setFormError('Failed to submit. Please try again.');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setFormError('An error occurred. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -65,30 +139,77 @@ export default function QuoteForm() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+          {formError && (
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm" role="alert">
+              {formError}
+            </div>
+          )}
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">First Name<span className="text-red-500">*</span></label>
-              <input required type="text" className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" />
+              <input 
+                required 
+                type="text" 
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                placeholder="Enter your first name"
+                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+              />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Last Name<span className="text-red-500">*</span></label>
-              <input required type="text" className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" />
+              <input 
+                required 
+                type="text" 
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                placeholder="Enter your last name"
+                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+              />
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Email<span className="text-red-500">*</span></label>
-            <input required type="email" className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" />
+            <input 
+              required 
+              type="email" 
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Enter your email address"
+              className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+            />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Phone Number<span className="text-red-500">*</span></label>
-            <input required type="tel" className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" />
+            <input 
+              required 
+              type="tel" 
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              placeholder="Enter your phone number"
+              pattern="[\d\s+\-()]+"
+              className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+            />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Message<span className="text-red-500">*</span></label>
-            <textarea required rows={4} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" />
+            <textarea 
+              required 
+              rows={4} 
+              name="message"
+              value={formData.message}
+              onChange={handleInputChange}
+              placeholder="Tell us about your requirements"
+              className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+            />
           </div>
 
           <div className="space-y-4">
@@ -117,8 +238,12 @@ export default function QuoteForm() {
           </div>
 
           <div className="flex items-center gap-4">
-            <GradientAnimatedButton type="submit" className="w-fit">
-              Send Message
+            <GradientAnimatedButton 
+              type="submit" 
+              className="w-fit"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Sending...' : 'Send Message'}
             </GradientAnimatedButton>
             {isSubmitted && (
               <span className="text-green-600 font-medium animate-pulse">
