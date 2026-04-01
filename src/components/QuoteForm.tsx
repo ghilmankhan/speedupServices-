@@ -1,6 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import GradientAnimatedButton from './GradientAnimatedButton';
 
+interface QuoteFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  message: string;
+  selectedServices: string[];
+  website: string;
+}
+
+interface FormErrors {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  message?: string;
+  selectedServices?: string;
+}
+
 const servicesList = [
   "Facility Management", "Manpower Supply", "Marketing Services",
   "Soft Services", "Hard Services", "Housekeeping Services",
@@ -16,114 +35,183 @@ const servicesList = [
   "Administrative Support Staff", "Soft POSM", "Hard POSM"
 ];
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const initialFormData: QuoteFormData = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  message: '',
+  selectedServices: [],
+  website: '',
+};
+
 export default function QuoteForm() {
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [serviceError, setServiceError] = useState('');
-  const [formError, setFormError] = useState('');
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    message: '',
-  });
+  const [formData, setFormData] = useState<QuoteFormData>(initialFormData);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
+  const selectedServices = formData.selectedServices;
 
   useEffect(() => {
-    if (!isSubmitted) {
+    if (!submitSuccess) {
       return;
     }
 
-    const timeoutId = window.setTimeout(() => setIsSubmitted(false), 5000);
+    const timeoutId = window.setTimeout(() => {
+      setSubmitSuccess(false);
+    }, 5000);
+
     return () => window.clearTimeout(timeoutId);
-  }, [isSubmitted]);
+  }, [submitSuccess]);
 
-  const toggleService = (service: string) => {
-    setSelectedServices(prev => 
-      prev.includes(service) 
-        ? prev.filter(s => s !== service) 
-        : [...prev, service]
-    );
-    setServiceError('');
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
+
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    setFormError('');
+
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
+
+    if (submitError) {
+      setSubmitError('');
+    }
+  };
+
+  const toggleService = (service: string) => {
+    setFormData(prev => ({
+      ...prev,
+      selectedServices: prev.selectedServices.includes(service)
+        ? prev.selectedServices.filter(selectedService => selectedService !== service)
+        : [...prev.selectedServices, service],
+    }));
+
+    if (errors.selectedServices) {
+      setErrors(prev => ({
+        ...prev,
+        selectedServices: undefined,
+      }));
+    }
+
+    if (submitError) {
+      setSubmitError('');
+    }
+  };
+
+  const validateForm = (data: QuoteFormData): FormErrors => {
+    const nextErrors: FormErrors = {};
+
+    if (!data.firstName) {
+      nextErrors.firstName = 'First name is required.';
+    } else if (data.firstName.length < 2) {
+      nextErrors.firstName = 'First name must be at least 2 characters.';
+    }
+
+    if (!data.lastName) {
+      nextErrors.lastName = 'Last name is required.';
+    } else if (data.lastName.length < 2) {
+      nextErrors.lastName = 'Last name must be at least 2 characters.';
+    }
+
+    if (!data.email) {
+      nextErrors.email = 'Email is required.';
+    } else if (!EMAIL_REGEX.test(data.email)) {
+      nextErrors.email = 'Please enter a valid email address.';
+    }
+
+    if (!data.phone) {
+      nextErrors.phone = 'Phone number is required.';
+    } else if (data.phone.replace(/\D/g, '').length < 7) {
+      nextErrors.phone = 'Phone number must contain at least 7 digits.';
+    }
+
+    if (!data.message) {
+      nextErrors.message = 'Message is required.';
+    } else if (data.message.length < 10) {
+      nextErrors.message = 'Message must be at least 10 characters.';
+    }
+
+    if (data.selectedServices.length === 0) {
+      nextErrors.selectedServices = 'Please select at least one service.';
+    }
+
+    return nextErrors;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormError('');
-    setServiceError('');
+    setSubmitError('');
+    setSubmitSuccess(false);
 
-    if (!formData.firstName.trim()) {
-      setFormError('First name is required.');
+    if (formData.website) {
       return;
     }
 
-    if (!formData.lastName.trim()) {
-      setFormError('Last name is required.');
+    const trimmedFormData: QuoteFormData = {
+      firstName: formData.firstName.trim(),
+      lastName: formData.lastName.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      message: formData.message.trim(),
+      selectedServices,
+      website: formData.website,
+    };
+
+    const nextErrors = validateForm(trimmedFormData);
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
       return;
     }
 
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setFormError('Please enter a valid email address.');
-      return;
-    }
-
-    if (!formData.phone.trim() || !/^[\d\s+\-()]+$/.test(formData.phone)) {
-      setFormError('Please enter a valid phone number.');
-      return;
-    }
-
-    if (!formData.message.trim()) {
-      setFormError('Message is required.');
-      return;
-    }
-
-    if (selectedServices.length === 0) {
-      setServiceError('Please select at least one service.');
-      return;
-    }
-
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
-      // Replace with your actual backend endpoint
-      const response = await fetch('/api/quote-request', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          message: formData.message,
-          services: selectedServices,
-          timestamp: new Date().toISOString(),
-        }),
+        body: JSON.stringify(trimmedFormData),
       });
 
-      if (response.ok) {
-        setIsSubmitted(true);
-        setFormData({ firstName: '', lastName: '', email: '', phone: '', message: '' });
-        setSelectedServices([]);
+      const data = (await response.json().catch(() => null)) as
+        | { success?: boolean; message?: string; errors?: FormErrors }
+        | null;
+
+      if (response.ok && data?.success) {
+        setFormData(initialFormData);
+        setErrors({});
+        setSubmitSuccess(true);
+        setSubmitError('');
       } else {
-        setFormError('Failed to submit. Please try again.');
+        if (data?.errors) {
+          setErrors(data.errors);
+        }
+
+        setSubmitError(
+          data?.message || 'Failed to submit. Please try again later.'
+        );
       }
     } catch (error) {
       console.error('Form submission error:', error);
-      setFormError('An error occurred. Please try again later.');
+      setSubmitError(
+        'An error occurred while submitting. Please check your connection and try again.'
+      );
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -137,89 +225,205 @@ export default function QuoteForm() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {formError && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm" role="alert">
-              {formError}
+        <form onSubmit={handleSubmit} noValidate className="space-y-6">
+          {submitError && (
+            <div
+              className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm"
+              role="alert"
+            >
+              {submitError}
             </div>
           )}
-          
+
+          {submitSuccess && (
+            <div
+              className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-600 text-sm"
+              role="status"
+              aria-live="polite"
+            >
+              ✓ Thank you! Your quotation request has been sent successfully.
+            </div>
+          )}
+
+          <input
+            type="text"
+            name="website"
+            value={formData.website}
+            onChange={handleInputChange}
+            style={{ display: 'none' }}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">First Name<span className="text-red-500">*</span></label>
-              <input 
-                required 
-                type="text" 
+              <label htmlFor="firstName" className="text-sm font-medium">
+                First Name<span className="text-red-500">*</span>
+              </label>
+              <input
+                id="firstName"
+                type="text"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
                 placeholder="Enter your first name"
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+                aria-invalid={!!errors.firstName}
+                aria-describedby={errors.firstName ? 'firstName-error' : undefined}
+                className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+                  errors.firstName
+                    ? 'border-red-300 focus:ring-red-200'
+                    : 'border-gray-200 focus:ring-primary-green/20'
+                }`}
               />
+              {errors.firstName && (
+                <p
+                  id="firstName-error"
+                  className="text-sm text-red-500"
+                  role="alert"
+                >
+                  {errors.firstName}
+                </p>
+              )}
             </div>
+
             <div className="space-y-2">
-              <label className="text-sm font-medium">Last Name<span className="text-red-500">*</span></label>
-              <input 
-                required 
-                type="text" 
+              <label htmlFor="lastName" className="text-sm font-medium">
+                Last Name<span className="text-red-500">*</span>
+              </label>
+              <input
+                id="lastName"
+                type="text"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleInputChange}
                 placeholder="Enter your last name"
-                className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+                aria-invalid={!!errors.lastName}
+                aria-describedby={errors.lastName ? 'lastName-error' : undefined}
+                className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+                  errors.lastName
+                    ? 'border-red-300 focus:ring-red-200'
+                    : 'border-gray-200 focus:ring-primary-green/20'
+                }`}
               />
+              {errors.lastName && (
+                <p
+                  id="lastName-error"
+                  className="text-sm text-red-500"
+                  role="alert"
+                >
+                  {errors.lastName}
+                </p>
+              )}
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Email<span className="text-red-500">*</span></label>
-            <input 
-              required 
-              type="email" 
+            <label htmlFor="email" className="text-sm font-medium">
+              Email<span className="text-red-500">*</span>
+            </label>
+            <input
+              id="email"
+              type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Enter your email address"
-              className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? 'email-error' : undefined}
+              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+                errors.email
+                  ? 'border-red-300 focus:ring-red-200'
+                  : 'border-gray-200 focus:ring-primary-green/20'
+              }`}
             />
+            {errors.email && (
+              <p
+                id="email-error"
+                className="text-sm text-red-500"
+                role="alert"
+              >
+                {errors.email}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Phone Number<span className="text-red-500">*</span></label>
-            <input 
-              required 
-              type="tel" 
+            <label htmlFor="phone" className="text-sm font-medium">
+              Phone Number<span className="text-red-500">*</span>
+            </label>
+            <input
+              id="phone"
+              type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
               placeholder="Enter your phone number"
-              pattern="[\d\s+\-()]+"
-              className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+              aria-invalid={!!errors.phone}
+              aria-describedby={errors.phone ? 'phone-error' : undefined}
+              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+                errors.phone
+                  ? 'border-red-300 focus:ring-red-200'
+                  : 'border-gray-200 focus:ring-primary-green/20'
+              }`}
             />
+            {errors.phone && (
+              <p
+                id="phone-error"
+                className="text-sm text-red-500"
+                role="alert"
+              >
+                {errors.phone}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Message<span className="text-red-500">*</span></label>
-            <textarea 
-              required 
-              rows={4} 
+            <label htmlFor="message" className="text-sm font-medium">
+              Message<span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="message"
+              rows={4}
               name="message"
               value={formData.message}
               onChange={handleInputChange}
-              placeholder="Tell us about your requirements"
-              className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-green/20" 
+              placeholder="Tell us about your requirements (minimum 10 characters)"
+              aria-invalid={!!errors.message}
+              aria-describedby={errors.message ? 'message-error' : undefined}
+              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+                errors.message
+                  ? 'border-red-300 focus:ring-red-200'
+                  : 'border-gray-200 focus:ring-primary-green/20'
+              }`}
             />
+            {errors.message && (
+              <p
+                id="message-error"
+                className="text-sm text-red-500"
+                role="alert"
+              >
+                {errors.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-4">
-            <label className="text-sm font-medium">Select Services<span className="text-red-500">*</span></label>
-            <div className="flex flex-wrap gap-2">
+            <label htmlFor="quote-services" className="text-sm font-medium">
+              Select Services<span className="text-red-500">*</span>
+            </label>
+            <div
+              id="quote-services"
+              className="flex flex-wrap gap-2"
+              aria-invalid={!!errors.selectedServices}
+              aria-describedby={errors.selectedServices ? 'selectedServices-error' : undefined}
+            >
               {servicesList.map((service, idx) => (
-                <button 
+                <button
+                  key={idx}
                   type="button"
-                  key={idx} 
                   onClick={() => toggleService(service)}
+                  aria-pressed={selectedServices.includes(service)}
                   className={`px-4 py-2 border rounded-lg text-xs transition-colors ${
                     selectedServices.includes(service)
                       ? 'bg-primary-green text-white border-primary-green'
@@ -230,34 +434,32 @@ export default function QuoteForm() {
                 </button>
               ))}
             </div>
-            {serviceError && (
-              <p className="text-sm text-red-500" role="alert">
-                {serviceError}
+            {errors.selectedServices && (
+              <p
+                id="selectedServices-error"
+                className="text-sm text-red-500"
+                role="alert"
+              >
+                {errors.selectedServices}
               </p>
             )}
           </div>
 
           <div className="flex items-center gap-4">
-            <GradientAnimatedButton 
-              type="submit" 
+            <GradientAnimatedButton
+              type="submit"
               className="w-fit"
-              disabled={isLoading}
+              disabled={isSubmitting}
             >
-              {isLoading ? 'Sending...' : 'Send Message'}
+              {isSubmitting ? 'Sending...' : submitSuccess ? 'Message Sent' : 'Send Message'}
             </GradientAnimatedButton>
-            {isSubmitted && (
-              <span className="text-green-600 font-medium animate-pulse">
-                Message sent successfully!
-              </span>
-            )}
           </div>
         </form>
 
-        {/* Image Side */}
         <div className="relative rounded-3xl overflow-hidden h-[400px] lg:h-full">
-          <img 
-            src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&q=80&w=1200" 
-            alt="Contact" 
+          <img
+            src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&q=80&w=1200"
+            alt="Contact form"
             className="w-full h-full object-cover grayscale"
             referrerPolicy="no-referrer"
           />

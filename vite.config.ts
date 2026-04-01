@@ -18,6 +18,12 @@ export default defineConfig(() => {
     server: {
       // Allow HMR to be disabled in environments where file watching causes issues.
       hmr: process.env.DISABLE_HMR !== 'true',
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3001',
+          changeOrigin: true,
+        },
+      },
     },
   };
 });
