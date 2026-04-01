@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import GradientAnimatedButton from './GradientAnimatedButton';
+import { useLanguage } from '../i18n';
 
 interface QuoteFormData {
   firstName: string;
@@ -20,21 +21,6 @@ interface FormErrors {
   selectedServices?: string;
 }
 
-const servicesList = [
-  "Facility Management", "Manpower Supply", "Marketing Services",
-  "Soft Services", "Hard Services", "Housekeeping Services",
-  "Office & Commercial Cleaning", "Industrial Cleaning", "Waste Management",
-  "Landscaping & Gardening", "Pest Control Coordination",
-  "Pantry & Office Support Services", "Electrical Maintenance",
-  "HVAC Installation & Maintenance", "Plumbing Services",
-  "Carpentry & Civil Maintenance", "Building & Infrastructure Maintenance",
-  "Equipment Maintenance", "Skilled Technicians",
-  "Construction Workers", "Warehouse & Logistics Staff",
-  "Office Assistants", "Helpers & Loaders",
-  "Machine Operators", "Facility Supervisors",
-  "Administrative Support Staff", "Soft POSM", "Hard POSM"
-];
-
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const initialFormData: QuoteFormData = {
@@ -48,6 +34,7 @@ const initialFormData: QuoteFormData = {
 };
 
 export default function QuoteForm() {
+  const { isArabic, t } = useLanguage();
   const [formData, setFormData] = useState<QuoteFormData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -114,37 +101,37 @@ export default function QuoteForm() {
     const nextErrors: FormErrors = {};
 
     if (!data.firstName) {
-      nextErrors.firstName = 'First name is required.';
+      nextErrors.firstName = t.quoteForm.validation.firstNameRequired;
     } else if (data.firstName.length < 2) {
-      nextErrors.firstName = 'First name must be at least 2 characters.';
+      nextErrors.firstName = t.quoteForm.validation.firstNameMin;
     }
 
     if (!data.lastName) {
-      nextErrors.lastName = 'Last name is required.';
+      nextErrors.lastName = t.quoteForm.validation.lastNameRequired;
     } else if (data.lastName.length < 2) {
-      nextErrors.lastName = 'Last name must be at least 2 characters.';
+      nextErrors.lastName = t.quoteForm.validation.lastNameMin;
     }
 
     if (!data.email) {
-      nextErrors.email = 'Email is required.';
+      nextErrors.email = t.quoteForm.validation.emailRequired;
     } else if (!EMAIL_REGEX.test(data.email)) {
-      nextErrors.email = 'Please enter a valid email address.';
+      nextErrors.email = t.quoteForm.validation.emailInvalid;
     }
 
     if (!data.phone) {
-      nextErrors.phone = 'Phone number is required.';
+      nextErrors.phone = t.quoteForm.validation.phoneRequired;
     } else if (data.phone.replace(/\D/g, '').length < 7) {
-      nextErrors.phone = 'Phone number must contain at least 7 digits.';
+      nextErrors.phone = t.quoteForm.validation.phoneInvalid;
     }
 
     if (!data.message) {
-      nextErrors.message = 'Message is required.';
+      nextErrors.message = t.quoteForm.validation.messageRequired;
     } else if (data.message.length < 10) {
-      nextErrors.message = 'Message must be at least 10 characters.';
+      nextErrors.message = t.quoteForm.validation.messageMin;
     }
 
     if (data.selectedServices.length === 0) {
-      nextErrors.selectedServices = 'Please select at least one service.';
+      nextErrors.selectedServices = t.quoteForm.validation.servicesRequired;
     }
 
     return nextErrors;
@@ -202,13 +189,13 @@ export default function QuoteForm() {
         }
 
         setSubmitError(
-          data?.message || 'Failed to submit. Please try again later.'
+          data?.message || t.quoteForm.messages.genericError
         );
       }
     } catch (error) {
       console.error('Form submission error:', error);
       setSubmitError(
-        'An error occurred while submitting. Please check your connection and try again.'
+        t.quoteForm.messages.networkError
       );
     } finally {
       setIsSubmitting(false);
@@ -217,15 +204,15 @@ export default function QuoteForm() {
 
   return (
     <section id="quote" className="section-container">
-      <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold mb-6">Wanna Get A Quotation?</h2>
+      <div className={`text-center mb-16 ${isArabic ? 'md:text-right' : ''}`}>
+        <h2 className="text-4xl font-bold mb-6">{t.quoteForm.title}</h2>
         <p className="text-text-muted max-w-4xl mx-auto">
-          Have a question or need a quotation? Our team is here to assist you and will get back to you shortly.
+          {t.quoteForm.description}
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        <form onSubmit={handleSubmit} noValidate className="space-y-6">
+        <form onSubmit={handleSubmit} noValidate className={`space-y-6 ${isArabic ? 'text-right' : 'text-left'}`}>
           {submitError && (
             <div
               className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm"
@@ -237,11 +224,11 @@ export default function QuoteForm() {
 
           {submitSuccess && (
             <div
-              className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-600 text-sm"
+              className="p-4 bg-primary/10 border border-primary/25 rounded-xl text-primary-dark text-sm"
               role="status"
               aria-live="polite"
             >
-              ✓ Thank you! Your quotation request has been sent successfully.
+              {t.quoteForm.messages.success}
             </div>
           )}
 
@@ -258,8 +245,8 @@ export default function QuoteForm() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="firstName" className="text-sm font-medium">
-                First Name<span className="text-red-500">*</span>
+              <label htmlFor="firstName" className={`text-sm font-medium ${isArabic ? 'text-right block' : ''}`}>
+                {t.quoteForm.labels.firstName}<span className="text-red-500">*</span>
               </label>
               <input
                 id="firstName"
@@ -267,13 +254,13 @@ export default function QuoteForm() {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                placeholder="Enter your first name"
+                placeholder={t.quoteForm.placeholders.firstName}
                 aria-invalid={!!errors.firstName}
                 aria-describedby={errors.firstName ? 'firstName-error' : undefined}
-                className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+                className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                   errors.firstName
                     ? 'border-red-300 focus:ring-red-200'
-                    : 'border-gray-200 focus:ring-primary-green/20'
+                    : 'border-gray-200 focus:ring-primary/20'
                 }`}
               />
               {errors.firstName && (
@@ -288,8 +275,8 @@ export default function QuoteForm() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="lastName" className="text-sm font-medium">
-                Last Name<span className="text-red-500">*</span>
+              <label htmlFor="lastName" className={`text-sm font-medium ${isArabic ? 'text-right block' : ''}`}>
+                {t.quoteForm.labels.lastName}<span className="text-red-500">*</span>
               </label>
               <input
                 id="lastName"
@@ -297,13 +284,13 @@ export default function QuoteForm() {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                placeholder="Enter your last name"
+                placeholder={t.quoteForm.placeholders.lastName}
                 aria-invalid={!!errors.lastName}
                 aria-describedby={errors.lastName ? 'lastName-error' : undefined}
-                className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+                className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                   errors.lastName
                     ? 'border-red-300 focus:ring-red-200'
-                    : 'border-gray-200 focus:ring-primary-green/20'
+                    : 'border-gray-200 focus:ring-primary/20'
                 }`}
               />
               {errors.lastName && (
@@ -319,8 +306,8 @@ export default function QuoteForm() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email<span className="text-red-500">*</span>
+            <label htmlFor="email" className={`text-sm font-medium ${isArabic ? 'text-right block' : ''}`}>
+              {t.quoteForm.labels.email}<span className="text-red-500">*</span>
             </label>
             <input
               id="email"
@@ -328,13 +315,13 @@ export default function QuoteForm() {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              placeholder="Enter your email address"
+              placeholder={t.quoteForm.placeholders.email}
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'email-error' : undefined}
-              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                 errors.email
                   ? 'border-red-300 focus:ring-red-200'
-                  : 'border-gray-200 focus:ring-primary-green/20'
+                  : 'border-gray-200 focus:ring-primary/20'
               }`}
             />
             {errors.email && (
@@ -349,8 +336,8 @@ export default function QuoteForm() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="phone" className="text-sm font-medium">
-              Phone Number<span className="text-red-500">*</span>
+            <label htmlFor="phone" className={`text-sm font-medium ${isArabic ? 'text-right block' : ''}`}>
+              {t.quoteForm.labels.phone}<span className="text-red-500">*</span>
             </label>
             <input
               id="phone"
@@ -358,13 +345,13 @@ export default function QuoteForm() {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              placeholder="Enter your phone number"
+              placeholder={t.quoteForm.placeholders.phone}
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? 'phone-error' : undefined}
-              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                 errors.phone
                   ? 'border-red-300 focus:ring-red-200'
-                  : 'border-gray-200 focus:ring-primary-green/20'
+                  : 'border-gray-200 focus:ring-primary/20'
               }`}
             />
             {errors.phone && (
@@ -379,8 +366,8 @@ export default function QuoteForm() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="message" className="text-sm font-medium">
-              Message<span className="text-red-500">*</span>
+            <label htmlFor="message" className={`text-sm font-medium ${isArabic ? 'text-right block' : ''}`}>
+              {t.quoteForm.labels.message}<span className="text-red-500">*</span>
             </label>
             <textarea
               id="message"
@@ -388,13 +375,13 @@ export default function QuoteForm() {
               name="message"
               value={formData.message}
               onChange={handleInputChange}
-              placeholder="Tell us about your requirements (minimum 10 characters)"
+              placeholder={t.quoteForm.placeholders.message}
               aria-invalid={!!errors.message}
               aria-describedby={errors.message ? 'message-error' : undefined}
-              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${
+              className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                 errors.message
                   ? 'border-red-300 focus:ring-red-200'
-                  : 'border-gray-200 focus:ring-primary-green/20'
+                  : 'border-gray-200 focus:ring-primary/20'
               }`}
             />
             {errors.message && (
@@ -409,28 +396,28 @@ export default function QuoteForm() {
           </div>
 
           <div className="space-y-4">
-            <label htmlFor="quote-services" className="text-sm font-medium">
-              Select Services<span className="text-red-500">*</span>
+            <label htmlFor="quote-services" className={`text-sm font-medium ${isArabic ? 'text-right block' : ''}`}>
+              {t.quoteForm.labels.services}<span className="text-red-500">*</span>
             </label>
             <div
               id="quote-services"
-              className="flex flex-wrap gap-2"
+              className={`flex flex-wrap gap-2 ${isArabic ? 'justify-end' : ''}`}
               aria-invalid={!!errors.selectedServices}
               aria-describedby={errors.selectedServices ? 'selectedServices-error' : undefined}
             >
-              {servicesList.map((service, idx) => (
+              {t.quoteForm.serviceOptions.map((service, idx) => (
                 <button
-                  key={idx}
+                  key={service.value}
                   type="button"
-                  onClick={() => toggleService(service)}
-                  aria-pressed={selectedServices.includes(service)}
+                  onClick={() => toggleService(service.value)}
+                  aria-pressed={selectedServices.includes(service.value)}
                   className={`px-4 py-2 border rounded-lg text-xs transition-colors ${
-                    selectedServices.includes(service)
-                      ? 'bg-primary-green text-white border-primary-green'
-                      : 'bg-white border-gray-200 hover:border-primary-green'
+                    selectedServices.includes(service.value)
+                      ? 'bg-primary text-white border-primary'
+                      : 'bg-white border-gray-200 hover:border-primary'
                   }`}
                 >
-                  {service}
+                  {service.label}
                 </button>
               ))}
             </div>
@@ -451,7 +438,7 @@ export default function QuoteForm() {
               className="w-fit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Sending...' : submitSuccess ? 'Message Sent' : 'Send Message'}
+              {isSubmitting ? t.quoteForm.buttons.sending : submitSuccess ? t.quoteForm.buttons.sent : t.quoteForm.buttons.send}
             </GradientAnimatedButton>
           </div>
         </form>
@@ -459,13 +446,13 @@ export default function QuoteForm() {
         <div className="relative rounded-3xl overflow-hidden h-[400px] lg:h-full">
           <img
             src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&q=80&w=1200"
-            alt="Contact form"
+            alt={t.quoteForm.imageAlt}
             className="w-full h-full object-cover grayscale"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute bottom-10 left-10 right-10 bg-primary-green/80 backdrop-blur-md p-8 rounded-2xl text-white text-center">
-            <p className="text-lg font-medium mb-2">Built for Speed. Designed for Success.</p>
-            <p className="text-sm opacity-80">We Don’t Just Support Business—We Speed It Up.</p>
+          <div className="absolute bottom-10 left-10 right-10 bg-primary/80 backdrop-blur-md p-8 rounded-2xl text-white text-center">
+            <p className="text-lg font-medium mb-2">{t.quoteForm.cardTagline}</p>
+            <p className="text-sm opacity-80">{t.quoteForm.cardSubtagline}</p>
           </div>
         </div>
       </div>

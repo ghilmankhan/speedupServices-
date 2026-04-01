@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import GradientAnimatedButton from './GradientAnimatedButton';
+import { useLanguage } from '../i18n';
 
 export default function Hero() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const { isArabic, t } = useLanguage();
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const { innerWidth, innerHeight } = window;
@@ -32,8 +34,8 @@ export default function Hero() {
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
                 <linearGradient id="waveBackGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#86efac" stopOpacity="0.2" />
-                  <stop offset="100%" stopColor="#22c55e" stopOpacity="0.15" />
+                  <stop offset="0%" stopColor="var(--color-primary-light)" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0.15" />
                 </linearGradient>
               </defs>
               <path
@@ -57,8 +59,8 @@ export default function Hero() {
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
                 <linearGradient id="waveMiddleGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#22c55e" stopOpacity="0.32" />
-                  <stop offset="100%" stopColor="#16a34a" stopOpacity="0.24" />
+                  <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.32" />
+                  <stop offset="100%" stopColor="var(--color-primary-dark)" stopOpacity="0.24" />
                 </linearGradient>
               </defs>
               <path
@@ -82,8 +84,8 @@ export default function Hero() {
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
                 <linearGradient id="waveFrontGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#22c55e" stopOpacity="0.42" />
-                  <stop offset="100%" stopColor="#16a34a" stopOpacity="0.3" />
+                  <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.42" />
+                  <stop offset="100%" stopColor="var(--color-primary-dark)" stopOpacity="0.3" />
                 </linearGradient>
               </defs>
               <path
@@ -104,7 +106,7 @@ export default function Hero() {
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="section-container relative z-10 text-center md:text-left">
+      <div className={`section-container relative z-10 text-center ${isArabic ? 'md:text-right' : 'md:text-left'}`}>
         <div className="max-w-4xl">
 
           {/* Tagline */}
@@ -114,7 +116,7 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="text-[#7c7f87] text-sm uppercase tracking-[0.35em] mb-6 font-medium"
           >
-            Built for Speed. Designed for Success.
+            {t.hero.tagline}
           </motion.p>
 
           {/* Heading */}
@@ -124,11 +126,11 @@ export default function Hero() {
             transition={{ delay: 0.1, duration: 0.8, ease: 'easeOut' }}
             className="text-[#17181c] text-4xl sm:text-5xl md:text-7xl font-bold leading-[1.02] tracking-[-0.04em] mb-8 max-w-5xl"
           >
-            Integrated Facility Management &{' '}
-            <span className="text-[#8CC63F] relative">
-              Manpower Solutions
+            {t.hero.titlePrefix}{' '}
+            <span className="text-primary relative">
+              {t.hero.titleHighlight}
               {/* subtle underline glow */}
-              <span className="absolute left-0 bottom-0 w-full h-[6px] bg-[#8CC63F]/30 blur-md"></span>
+              <span className="absolute left-0 bottom-0 w-full h-[6px] bg-primary/30 blur-md"></span>
             </span>
           </motion.h1>
 
@@ -139,7 +141,7 @@ export default function Hero() {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-[#7c7f87] text-base sm:text-lg leading-relaxed max-w-2xl mb-10"
           >
-            We Don’t Just Support Business—We Speed It Up.
+            {t.hero.subtitle}
           </motion.p>
 
           {/* CTA */}
@@ -147,18 +149,18 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="flex justify-center md:justify-start"
+            className={`flex justify-center ${isArabic ? 'md:justify-end' : 'md:justify-start'}`}
           >
             <div className="group relative">
               {/* glow behind button */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#8CC63F] to-[#3E4A2A] blur-lg opacity-30 group-hover:opacity-60 transition duration-300 rounded-full"></div>
+              <div className="absolute -inset-1 bg-[linear-gradient(90deg,var(--color-primary)_0%,var(--color-primary-dark)_65%,#111111_100%)] blur-lg opacity-30 group-hover:opacity-60 transition duration-300 rounded-full"></div>
 
               <GradientAnimatedButton
                 onClick={() =>
                   document.getElementById('quote')?.scrollIntoView({ behavior: 'smooth' })
                 }
               >
-                Get a Quotation
+                {t.hero.primaryCta}
                 <span className="text-xl ml-1 group-hover:translate-x-1 transition">
                   →
                 </span>

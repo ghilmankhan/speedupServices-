@@ -2,20 +2,14 @@ import React, { useState } from 'react';
 import { Facebook, Instagram, Linkedin, Twitter, Menu, X, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
 import Logo from './Logo';
+import { useLanguage } from '../i18n';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Industries', href: '#industries' },
-    { name: 'Get Quotation', href: '#quote' },
-  ];
+  const { language, isArabic, setLanguage, t } = useLanguage();
 
   return (
-    <nav className="fixed top-6 left-0 right-0 z-50 px-6">
+    <nav dir="ltr" className="fixed top-6 left-0 right-0 z-50 px-6">
       <div className="max-w-7xl mx-auto bg-white/80 backdrop-blur-md border border-gray-100 rounded-[2rem] shadow-sm overflow-hidden">
         <div className="flex items-center justify-between py-3 px-8">
           {/* Logo */}
@@ -25,11 +19,11 @@ export default function Navbar() {
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {t.navbar.links.map((link) => (
               <a 
                 key={link.name} 
                 href={link.href} 
-                className="text-sm font-medium hover:text-primary-green transition-colors"
+                className={`text-sm font-medium hover:text-primary transition-colors ${isArabic ? 'text-right' : 'text-left'}`}
               >
                 {link.name}
               </a>
@@ -37,21 +31,57 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Socials */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
             <div className="flex items-center gap-4">
-              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Facebook page">
+              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Facebook page">
                 <Facebook size={18} />
               </a>
-              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Instagram page">
+              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Instagram page">
                 <Instagram size={18} />
               </a>
-              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our LinkedIn page">
+              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our LinkedIn page">
                 <Linkedin size={18} />
               </a>
-              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Twitter page">
+              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Twitter page">
                 <Twitter size={18} />
               </a>
             </div>
+
+            <button
+              type="button"
+              onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+              role="switch"
+              aria-checked={isArabic}
+              className="relative shrink-0 w-[116px] h-[56px] rounded-full bg-[#f3f3f1] border border-[#e6e6e1] shadow-[0_2px_10px_rgba(0,0,0,0.05)] p-[4px] overflow-hidden"
+              aria-label={language === 'ar' ? 'Switch language to English' : 'التبديل إلى العربية'}
+            >
+              <div className="absolute inset-0 flex items-center justify-between px-[18px]">
+                <span
+                  className={`text-[18px] font-semibold transition-colors duration-300 ${
+                    language === 'en' ? 'text-transparent' : 'text-[#a3a8b3]'
+                  }`}
+                >
+                  EN
+                </span>
+                <span
+                  className={`text-[18px] font-semibold transition-colors duration-300 ${
+                    language === 'ar' ? 'text-transparent' : 'text-[#a3a8b3]'
+                  }`}
+                >
+                  AR
+                </span>
+              </div>
+
+              <motion.div
+                className="absolute top-[4px] left-[4px] w-[48px] h-[48px] rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.10)] flex items-center justify-center z-10"
+                animate={{ x: language === 'ar' ? 60 : 0 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+              >
+                <span className="text-[18px] font-semibold text-primary">
+                  {language.toUpperCase()}
+                </span>
+              </motion.div>
+            </button>
 
             <motion.a
               href="tel:+918108102609"
@@ -66,13 +96,13 @@ export default function Navbar() {
                 flex items-center gap-3
                 px-7 py-4
                 rounded-full
-                bg-[#8CC63F]
+                bg-primary
                 text-white
                 font-semibold
                 text-lg
-                shadow-[0_10px_30px_rgba(140,198,63,0.25)]
+                brand-shadow
               "
-              aria-label="Call +91 8108102609"
+              aria-label={t.navbar.callLabel}
             >
               <motion.div
                 animate={{
@@ -115,27 +145,65 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden border-t border-gray-100 bg-white/95 px-8 py-6 space-y-4 animate-in slide-in-from-top duration-300">
-            {navLinks.map((link) => (
+            <div className="flex items-center justify-between gap-4" dir="ltr">
+              <button
+                type="button"
+                onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+                role="switch"
+                aria-checked={isArabic}
+                className="relative shrink-0 w-[116px] h-[56px] rounded-full bg-[#f3f3f1] border border-[#e6e6e1] shadow-[0_2px_10px_rgba(0,0,0,0.05)] p-[4px] overflow-hidden"
+                aria-label={language === 'ar' ? 'Switch language to English' : 'التبديل إلى العربية'}
+              >
+                <div className="absolute inset-0 flex items-center justify-between px-[18px]">
+                  <span
+                    className={`text-[18px] font-semibold transition-colors duration-300 ${
+                      language === 'en' ? 'text-transparent' : 'text-[#a3a8b3]'
+                    }`}
+                  >
+                    EN
+                  </span>
+                  <span
+                    className={`text-[18px] font-semibold transition-colors duration-300 ${
+                      language === 'ar' ? 'text-transparent' : 'text-[#a3a8b3]'
+                    }`}
+                  >
+                    AR
+                  </span>
+                </div>
+
+                <motion.div
+                  className="absolute top-[4px] left-[4px] w-[48px] h-[48px] rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.10)] flex items-center justify-center z-10"
+                  animate={{ x: language === 'ar' ? 60 : 0 }}
+                  transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+                >
+                  <span className="text-[18px] font-semibold text-primary">
+                    {language.toUpperCase()}
+                  </span>
+                </motion.div>
+              </button>
+            </div>
+
+            {t.navbar.links.map((link) => (
               <a 
                 key={link.name} 
                 href={link.href} 
                 onClick={() => setIsOpen(false)}
-                className="block text-lg font-medium hover:text-primary-green transition-colors"
+                className={`block text-lg font-medium hover:text-primary transition-colors ${isArabic ? 'text-right' : 'text-left'}`}
               >
                 {link.name}
               </a>
             ))}
             <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
-              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Facebook page">
+              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Facebook page">
                 <Facebook size={20} />
               </a>
-              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Instagram page">
+              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Instagram page">
                 <Instagram size={20} />
               </a>
-              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our LinkedIn page">
+              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our LinkedIn page">
                 <Linkedin size={20} />
               </a>
-              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary-green transition-colors" aria-label="Visit our Twitter page">
+              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Twitter page">
                 <Twitter size={20} />
               </a>
             </div>

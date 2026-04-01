@@ -1,8 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #8CC63F;
+  --color-primary-dark: #6FA62F;
+  --color-primary-light: #A9D85C;
+  --color-primary-soft: #EFF7E2;
   --color-primary-green: #8CC63F; /* Green from logo */
   --color-primary-charcoal: #1A1A1A; /* Charcoal from logo */
   --color-bg-light: #F5F5F7;
@@ -10,8 +14,8 @@
   --color-text-muted: #6E6E73;
   --color-footer-bg: #111111;
   
-  --background-image-primary-gradient: linear-gradient(to right, #8CC63F, #1A1A1A);
-  --background-image-hero-blob: linear-gradient(135deg, #8CC63F 0%, #1A1A1A 50%, #1A1A1A 100%);
+  --background-image-primary-gradient: linear-gradient(90deg, #8CC63F 0%, #6FA62F 65%, #111111 100%);
+  --background-image-hero-blob: linear-gradient(135deg, #A9D85C 0%, #8CC63F 42%, #6FA62F 72%, #111111 100%);
 
   @keyframes border-flow {
     0% { background-position: 0% 0%; }
@@ -30,6 +34,15 @@
   }
   body {
     @apply bg-bg-light text-text-main font-sans antialiased;
+  }
+
+  html[lang='ar'] body {
+    font-family: 'Noto Sans Arabic', sans-serif;
+  }
+
+  html[lang='ar'] p,
+  html[lang='ar'] .arabic-body {
+    font-family: 'Noto Naskh Arabic', serif;
   }
 }
 
@@ -61,5 +74,9 @@
     content: '';
     @apply absolute inset-[2px] bg-black rounded-full;
     z-index: -1;
+  }
+
+  .brand-shadow {
+    box-shadow: 0 10px 30px rgba(140, 198, 63, 0.25);
   }
 }

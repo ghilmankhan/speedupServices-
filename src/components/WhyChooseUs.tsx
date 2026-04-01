@@ -1,16 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Award, Zap, Scale, Eye, Tag, Clock, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../i18n';
 
 export default function WhyChooseUs() {
+  const { isArabic, t } = useLanguage();
   const reasons = [
-    { title: "Professional & Experienced Team", icon: <Award size={24} /> },
-    { title: "Quick Mobilization & Deployment", icon: <Zap size={24} /> },
-    { title: "Compliance with Saudi Labor Law", icon: <Scale size={24} /> },
-    { title: "Quality Control & Supervision", icon: <Eye size={24} /> },
-    { title: "Competitive & Transparent Pricing", icon: <Tag size={24} /> },
-    { title: "24/7 Operational Support", icon: <Clock size={24} /> },
-    { title: "Replacement Guarantee", icon: <ShieldCheck size={24} /> }
+    { title: t.whyChooseUs.reasons[0], icon: <Award size={24} /> },
+    { title: t.whyChooseUs.reasons[1], icon: <Zap size={24} /> },
+    { title: t.whyChooseUs.reasons[2], icon: <Scale size={24} /> },
+    { title: t.whyChooseUs.reasons[3], icon: <Eye size={24} /> },
+    { title: t.whyChooseUs.reasons[4], icon: <Tag size={24} /> },
+    { title: t.whyChooseUs.reasons[5], icon: <Clock size={24} /> },
+    { title: t.whyChooseUs.reasons[6], icon: <ShieldCheck size={24} /> }
   ];
 
   return (
@@ -22,14 +24,14 @@ export default function WhyChooseUs() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold mb-8">Why Choose Speedup Services?</h2>
-            <p className="text-text-muted text-lg mb-12 leading-relaxed">
-              We are committed to delivering excellence through our core values of reliability, quality, and compliance. Our client-centric approach ensures your operations run smoothly.
+            <h2 className={`text-4xl font-bold mb-8 ${isArabic ? 'text-right' : 'text-left'}`}>{t.whyChooseUs.title}</h2>
+            <p className={`text-text-muted text-lg mb-12 leading-relaxed ${isArabic ? 'text-right' : 'text-left'}`}>
+              {t.whyChooseUs.description}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {reasons.map((reason, idx) => (
                 <div key={idx} className="flex items-center gap-3 p-4 bg-bg-light rounded-2xl border border-gray-100">
-                  <div className="text-primary-green">{reason.icon}</div>
+                  <div className="text-primary">{reason.icon}</div>
                   <span className="font-semibold text-sm">{reason.title}</span>
                 </div>
               ))}
