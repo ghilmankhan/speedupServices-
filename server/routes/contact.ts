@@ -23,7 +23,6 @@ interface FormErrors {
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const RECEIVER_EMAIL = process.env.CONTACT_RECEIVER || 'speedupservicesofficial@gmail.com';
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
 
@@ -65,6 +64,14 @@ const getTransporter = () => {
       pass: process.env.EMAIL_PASS,
     },
   });
+};
+
+const getReceiverEmail = (): string => {
+  if (!process.env.CONTACT_RECEIVER) {
+    throw new Error('Contact receiver email is not configured.');
+  }
+
+  return process.env.CONTACT_RECEIVER;
 };
 
 const getClientIp = (req: Request): string => {
@@ -193,7 +200,7 @@ const generateEmailText = (data: ReturnType<typeof normalizePayload>): string =>
   ].join('\n');
 };
 
-router.post('/api/contact', async (req: Request, res: Response) => {
+router.post('/contact', async (req: Request, res: Response) => {
   try {
     const clientIp = getClientIp(req);
 
@@ -220,16 +227,29 @@ router.post('/api/contact', async (req: Request, res: Response) => {
     }
 
     const transporter = getTransporter();
+    const receiverEmail = getReceiverEmail();
+
+    try {
+      await transporter.verify();
+      console.log('SMTP server ready');
+    } catch (smtpError) {
+      console.error('SMTP verification failed:', smtpError);
+      throw smtpError;
+    }
+
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: RECEIVER_EMAIL,
+      to: receiverEmail,
       replyTo: data.email,
       subject: `New Quote Request from ${data.firstName} ${data.lastName}`,
       html: generateEmailHtml(data),
       text: generateEmailText(data),
     });
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({
+      success: true,
+      message: 'Email sent successfully',
+    });
   } catch (error) {
     console.error('Contact form error:', error);
 

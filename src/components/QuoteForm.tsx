@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import GradientAnimatedButton from './GradientAnimatedButton';
 import { useLanguage } from '../i18n';
 
@@ -19,6 +19,7 @@ interface FormErrors {
   phone?: string;
   message?: string;
   selectedServices?: string;
+  website?: string;
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,18 +44,6 @@ export default function QuoteForm() {
 
   const selectedServices = formData.selectedServices;
 
-  useEffect(() => {
-    if (!submitSuccess) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setSubmitSuccess(false);
-    }, 5000);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [submitSuccess]);
-
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -76,6 +65,8 @@ export default function QuoteForm() {
       setSubmitError('');
     }
   };
+
+  const getFieldErrorId = (fieldName: keyof FormErrors): string => `${fieldName}-error`;
 
   const toggleService = (service: string) => {
     setFormData(prev => ({
@@ -143,6 +134,7 @@ export default function QuoteForm() {
     setSubmitSuccess(false);
 
     if (formData.website) {
+      setSubmitError(t.quoteForm.messages.genericError);
       return;
     }
 
@@ -152,8 +144,8 @@ export default function QuoteForm() {
       email: formData.email.trim(),
       phone: formData.phone.trim(),
       message: formData.message.trim(),
-      selectedServices,
-      website: formData.website,
+      selectedServices: selectedServices.map(service => service.trim()),
+      website: formData.website.trim(),
     };
 
     const nextErrors = validateForm(trimmedFormData);
@@ -178,25 +170,28 @@ export default function QuoteForm() {
         | { success?: boolean; message?: string; errors?: FormErrors }
         | null;
 
+      if (!response.ok || !data?.success) {
+        if (data?.errors) {
+          setErrors(data.errors);
+        }
+
+        throw new Error(
+          data?.message || t.quoteForm.messages.genericError
+        );
+      }
+
       if (response.ok && data?.success) {
         setFormData(initialFormData);
         setErrors({});
         setSubmitSuccess(true);
         setSubmitError('');
-      } else {
-        if (data?.errors) {
-          setErrors(data.errors);
-        }
-
-        setSubmitError(
-          data?.message || t.quoteForm.messages.genericError
-        );
       }
     } catch (error) {
       console.error('Form submission error:', error);
-      setSubmitError(
-        t.quoteForm.messages.networkError
-      );
+      const message = error instanceof Error
+        ? error.message
+        : t.quoteForm.messages.networkError;
+      setSubmitError(message || t.quoteForm.messages.networkError);
     } finally {
       setIsSubmitting(false);
     }
@@ -237,7 +232,7 @@ export default function QuoteForm() {
             name="website"
             value={formData.website}
             onChange={handleInputChange}
-            style={{ display: 'none' }}
+            className="sr-only"
             tabIndex={-1}
             autoComplete="off"
             aria-hidden="true"
@@ -255,8 +250,9 @@ export default function QuoteForm() {
                 value={formData.firstName}
                 onChange={handleInputChange}
                 placeholder={t.quoteForm.placeholders.firstName}
+                autoComplete="given-name"
                 aria-invalid={!!errors.firstName}
-                aria-describedby={errors.firstName ? 'firstName-error' : undefined}
+                aria-describedby={errors.firstName ? getFieldErrorId('firstName') : undefined}
                 className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                   errors.firstName
                     ? 'border-red-300 focus:ring-red-200'
@@ -265,7 +261,7 @@ export default function QuoteForm() {
               />
               {errors.firstName && (
                 <p
-                  id="firstName-error"
+                  id={getFieldErrorId('firstName')}
                   className="text-sm text-red-500"
                   role="alert"
                 >
@@ -285,8 +281,9 @@ export default function QuoteForm() {
                 value={formData.lastName}
                 onChange={handleInputChange}
                 placeholder={t.quoteForm.placeholders.lastName}
+                autoComplete="family-name"
                 aria-invalid={!!errors.lastName}
-                aria-describedby={errors.lastName ? 'lastName-error' : undefined}
+                aria-describedby={errors.lastName ? getFieldErrorId('lastName') : undefined}
                 className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                   errors.lastName
                     ? 'border-red-300 focus:ring-red-200'
@@ -295,7 +292,7 @@ export default function QuoteForm() {
               />
               {errors.lastName && (
                 <p
-                  id="lastName-error"
+                  id={getFieldErrorId('lastName')}
                   className="text-sm text-red-500"
                   role="alert"
                 >
@@ -316,8 +313,9 @@ export default function QuoteForm() {
               value={formData.email}
               onChange={handleInputChange}
               placeholder={t.quoteForm.placeholders.email}
+              autoComplete="email"
               aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? 'email-error' : undefined}
+              aria-describedby={errors.email ? getFieldErrorId('email') : undefined}
               className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                 errors.email
                   ? 'border-red-300 focus:ring-red-200'
@@ -326,7 +324,7 @@ export default function QuoteForm() {
             />
             {errors.email && (
               <p
-                id="email-error"
+                id={getFieldErrorId('email')}
                 className="text-sm text-red-500"
                 role="alert"
               >
@@ -346,8 +344,9 @@ export default function QuoteForm() {
               value={formData.phone}
               onChange={handleInputChange}
               placeholder={t.quoteForm.placeholders.phone}
+              autoComplete="tel"
               aria-invalid={!!errors.phone}
-              aria-describedby={errors.phone ? 'phone-error' : undefined}
+              aria-describedby={errors.phone ? getFieldErrorId('phone') : undefined}
               className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                 errors.phone
                   ? 'border-red-300 focus:ring-red-200'
@@ -356,7 +355,7 @@ export default function QuoteForm() {
             />
             {errors.phone && (
               <p
-                id="phone-error"
+                id={getFieldErrorId('phone')}
                 className="text-sm text-red-500"
                 role="alert"
               >
@@ -377,7 +376,7 @@ export default function QuoteForm() {
               onChange={handleInputChange}
               placeholder={t.quoteForm.placeholders.message}
               aria-invalid={!!errors.message}
-              aria-describedby={errors.message ? 'message-error' : undefined}
+              aria-describedby={errors.message ? getFieldErrorId('message') : undefined}
               className={`w-full p-3 bg-white border rounded-xl focus:outline-none focus:ring-2 ${isArabic ? 'text-right' : 'text-left'} ${
                 errors.message
                   ? 'border-red-300 focus:ring-red-200'
@@ -386,7 +385,7 @@ export default function QuoteForm() {
             />
             {errors.message && (
               <p
-                id="message-error"
+                id={getFieldErrorId('message')}
                 className="text-sm text-red-500"
                 role="alert"
               >
@@ -396,14 +395,16 @@ export default function QuoteForm() {
           </div>
 
           <div className="space-y-4">
-            <label htmlFor="quote-services" className={`text-sm font-medium ${isArabic ? 'text-right block' : ''}`}>
+            <label id="quote-services-label" htmlFor="quote-services" className={`text-sm font-medium ${isArabic ? 'text-right block' : ''}`}>
               {t.quoteForm.labels.services}<span className="text-red-500">*</span>
             </label>
             <div
               id="quote-services"
+              role="group"
+              aria-labelledby="quote-services-label"
               className={`flex flex-wrap gap-2 ${isArabic ? 'justify-end' : ''}`}
               aria-invalid={!!errors.selectedServices}
-              aria-describedby={errors.selectedServices ? 'selectedServices-error' : undefined}
+              aria-describedby={errors.selectedServices ? getFieldErrorId('selectedServices') : undefined}
             >
               {t.quoteForm.serviceOptions.map((service, idx) => (
                 <button
@@ -423,7 +424,7 @@ export default function QuoteForm() {
             </div>
             {errors.selectedServices && (
               <p
-                id="selectedServices-error"
+                id={getFieldErrorId('selectedServices')}
                 className="text-sm text-red-500"
                 role="alert"
               >
@@ -444,16 +445,61 @@ export default function QuoteForm() {
         </form>
 
         <div className="relative rounded-3xl overflow-hidden h-[400px] lg:h-full">
-          <img
-            src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&q=80&w=1200"
-            alt={t.quoteForm.imageAlt}
-            className="w-full h-full object-cover grayscale"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute bottom-10 left-10 right-10 bg-primary/80 backdrop-blur-md p-8 rounded-2xl text-white text-center">
-            <p className="text-lg font-medium mb-2">{t.quoteForm.cardTagline}</p>
-            <p className="text-sm opacity-80">{t.quoteForm.cardSubtagline}</p>
-          </div>
+          {submitSuccess ? (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/15 via-primary/5 to-white p-8 transition-all duration-500 ease-out opacity-100 scale-100">
+              <div className="flex w-full max-w-md flex-col items-center justify-center rounded-[28px] border border-primary/15 bg-white/80 px-8 py-10 text-center shadow-[0_24px_80px_rgba(22,163,74,0.12)] backdrop-blur-sm">
+                <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-primary/15 bg-primary/10 shadow-[0_12px_32px_rgba(22,163,74,0.16)]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="h-7 w-7"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 12.5l4.5 4.5L19 7.5" />
+                    </svg>
+                  </div>
+                </div>
+
+                <h3 className="mb-4 text-3xl font-bold text-primary-dark">
+                  {isArabic ? 'شكراً لك!' : 'Thank You!'}
+                </h3>
+
+                <p className="mb-3 text-base leading-7 text-slate-700">
+                  {isArabic
+                    ? 'تم إرسال طلب عرض السعر الخاص بك بنجاح. سيقوم فريقنا بالتواصل معك قريباً.'
+                    : 'Your quotation request has been sent successfully. Our team will contact you shortly.'}
+                </p>
+
+                <p className="mb-6 text-sm leading-6 text-slate-500">
+                  {isArabic
+                    ? 'نقدّر وقتك ونتطلع إلى مساعدتك.'
+                    : 'We appreciate your interest and look forward to helping you.'}
+                </p>
+
+                <div className="inline-flex items-center rounded-full border border-primary/15 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                  {isArabic ? 'تم استلام الطلب' : 'Request Received'}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="h-full w-full transition-all duration-500 ease-out opacity-100 scale-100">
+              <img
+                src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&q=80&w=1200"
+                alt={t.quoteForm.imageAlt}
+                className="w-full h-full object-cover grayscale"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute bottom-10 left-10 right-10 bg-primary/80 backdrop-blur-md p-8 rounded-2xl text-white text-center">
+                <p className="text-lg font-medium mb-2">{t.quoteForm.cardTagline}</p>
+                <p className="text-sm opacity-80">{t.quoteForm.cardSubtagline}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
