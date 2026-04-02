@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
+import { Facebook, Linkedin } from 'lucide-react';
 import { useLanguage } from '../i18n';
 
 export default function Footer() {
@@ -67,14 +67,8 @@ export default function Footer() {
               <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors" aria-label="Visit our Facebook page">
                 <Facebook size={20} />
               </a>
-              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors" aria-label="Visit our Instagram page">
-                <Instagram size={20} />
-              </a>
               <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors" aria-label="Visit our LinkedIn page">
                 <Linkedin size={20} />
-              </a>
-              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors" aria-label="Visit our Twitter page">
-                <Twitter size={20} />
               </a>
             </div>
           </div>

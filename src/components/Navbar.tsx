@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Facebook, Instagram, Linkedin, Twitter, Menu, X, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Facebook, Linkedin, Menu, X, Phone, ArrowRight } from 'lucide-react';
 import Logo from './Logo';
 import { useLanguage } from '../i18n';
+import { useRegionDetection } from '../hooks/useRegionDetection';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { language, isArabic, setLanguage, t } = useLanguage();
+  const { phoneDisplay, phoneHref } = useRegionDetection();
 
   return (
     <nav dir="ltr" className="fixed top-6 left-0 right-0 z-50 px-6">
@@ -23,28 +25,34 @@ export default function Navbar() {
               <a 
                 key={link.name} 
                 href={link.href} 
-                className={`text-sm font-medium hover:text-primary transition-colors ${isArabic ? 'text-right' : 'text-left'}`}
+                className={`group inline-flex items-center gap-1 text-sm transition-colors ${
+                  link.href === '#quote'
+                    ? 'font-semibold text-text-main'
+                    : 'font-medium text-text-muted hover:text-primary'
+                } ${isArabic ? 'text-right' : 'text-left'}`}
               >
-                {link.name}
+                <span className="relative">
+                  {link.name}
+                  {link.href === '#quote' && (
+                    <span className="absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-primary transition-transform duration-300 group-hover:scale-x-100" />
+                  )}
+                </span>
+                {link.href === '#quote' && (
+                  <ArrowRight className="h-3.5 w-3.5 text-primary transition-transform duration-300 group-hover:translate-x-1" />
+                )}
               </a>
             ))}
           </div>
 
           {/* Desktop Socials */}
-          <div className="hidden md:flex items-center gap-3">
-            <div className="flex items-center gap-4">
-              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Facebook page">
-                <Facebook size={18} />
-              </a>
-              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Instagram page">
-                <Instagram size={18} />
-              </a>
-              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our LinkedIn page">
-                <Linkedin size={18} />
-              </a>
-              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Twitter page">
-                <Twitter size={18} />
-              </a>
+          <div className="hidden md:flex items-center gap-5">
+            <div className="flex items-center gap-3">
+              <motion.a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.06 }} className="text-text-muted/80 hover:text-primary transition-colors duration-300" aria-label="Visit our Facebook page">
+                <Facebook size={17} />
+              </motion.a>
+              <motion.a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.06 }} className="text-text-muted/80 hover:text-primary transition-colors duration-300" aria-label="Visit our LinkedIn page">
+                <Linkedin size={17} />
+              </motion.a>
             </div>
 
             <button
@@ -84,42 +92,30 @@ export default function Navbar() {
             </button>
 
             <motion.a
-              href="tel:+918108102609"
-              animate={{ y: [0, -4, 0] }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
+              href={phoneHref}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.25 }}
               className="
                 relative overflow-hidden
-                flex items-center gap-3
-                px-7 py-4
+                flex flex-col items-center gap-1
+                px-6 py-4
                 rounded-full
                 bg-primary
                 text-white
                 font-semibold
-                text-lg
+                text-base
                 brand-shadow
+                hover:shadow-[0_12px_35px_rgba(140,198,63,0.35)]
               "
-              aria-label={t.navbar.callLabel}
+              aria-label={`Call us at ${phoneDisplay}`}
             >
-              <motion.div
-                animate={{
-                  rotate: [0, -8, 8, 0],
-                  scale: [1, 1.06, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-                className="relative z-10"
-              >
-                <Phone size={20} />
-              </motion.div>
-
-              <span className="relative z-10">+91 8108102609</span>
+              <span className="relative z-10 flex items-center gap-2">
+                <Phone size={18} className="transition-transform duration-250 group-hover:translate-x-1" />
+                <span className="text-sm">Contact Us</span>
+              </span>
+              <span className="relative z-10 text-xs font-medium opacity-95">
+                {phoneDisplay}
+              </span>
 
               <motion.div
                 className="absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -133,13 +129,26 @@ export default function Navbar() {
             </motion.a>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button 
-            className="md:hidden p-2 text-text-main"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center gap-3 md:hidden">
+            <motion.a
+              href={phoneHref}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.25 }}
+              className="flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white brand-shadow hover:shadow-[0_10px_28px_rgba(140,198,63,0.3)]"
+              aria-label={`Call us at ${phoneDisplay}`}
+            >
+              <Phone size={16} />
+              <span>Call</span>
+            </motion.a>
+
+            {/* Mobile Menu Toggle */}
+            <button 
+              className="p-2 text-text-main"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -188,23 +197,27 @@ export default function Navbar() {
                 key={link.name} 
                 href={link.href} 
                 onClick={() => setIsOpen(false)}
-                className={`block text-lg font-medium hover:text-primary transition-colors ${isArabic ? 'text-right' : 'text-left'}`}
+                className={`group flex items-center gap-2 text-lg transition-colors ${
+                  link.href === '#quote'
+                    ? 'font-semibold text-text-main'
+                    : 'font-medium text-text-main hover:text-primary'
+                } ${isArabic ? 'justify-end text-right' : 'text-left'}`}
               >
-                {link.name}
+                <span className="relative">
+                  {link.name}
+                  {link.href === '#quote' && (
+                    <span className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-primary" />
+                  )}
+                </span>
+                {link.href === '#quote' && <ArrowRight className="h-4 w-4 text-primary" />}
               </a>
             ))}
-            <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
-              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Facebook page">
-                <Facebook size={20} />
+            <div className="flex items-center gap-5 pt-4 border-t border-gray-100">
+              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-muted/80 hover:text-primary transition-colors duration-300" aria-label="Visit our Facebook page">
+                <Facebook size={18} />
               </a>
-              <a href="https://www.instagram.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Instagram page">
-                <Instagram size={20} />
-              </a>
-              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our LinkedIn page">
-                <Linkedin size={20} />
-              </a>
-              <a href="https://www.twitter.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-main hover:text-primary transition-colors" aria-label="Visit our Twitter page">
-                <Twitter size={20} />
+              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-text-muted/80 hover:text-primary transition-colors duration-300" aria-label="Visit our LinkedIn page">
+                <Linkedin size={18} />
               </a>
             </div>
           </div>

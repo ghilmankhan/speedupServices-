@@ -1,328 +1,123 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useLanguage } from '../i18n';
-
-type TabId = 'facility' | 'manpower' | 'marketing';
-type CardSize = 'large' | 'wide' | 'tall' | 'small';
-
-interface ServiceCard {
-  titleKey: string;
-  subtitleKey?: string;
-  tagKey: string;
-  type: 'image' | 'video';
-  media: string;
-  poster?: string;
-  size: CardSize;
-}
-
-const sizeClasses: Record<CardSize, string> = {
-  large: 'xl:col-span-2 xl:row-span-2',
-  wide: 'xl:col-span-2',
-  tall: 'xl:row-span-2',
-  small: '',
-};
-
-const serviceGalleryData: Record<TabId, ServiceCard[]> = {
-  facility: [
-    {
-      titleKey: 'commercialCleaning',
-      subtitleKey: 'commercialCleaning',
-      tagKey: 'facility',
-      type: 'video',
-      media: '/videos/commercial-cleaning.mp4',
-      poster: '/images/commercial-cleaning.jpg',
-      size: 'large',
-    },
-    {
-      titleKey: 'landscaping',
-      subtitleKey: 'landscaping',
-      tagKey: 'softServices',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'pestControl',
-      subtitleKey: 'pestControl',
-      tagKey: 'softServices',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'hvacMaintenance',
-      subtitleKey: 'hvacMaintenance',
-      tagKey: 'hardServices',
-      type: 'video',
-      media: '/videos/hvac-maintenance.mp4',
-      poster: '/images/hvac-maintenance.jpg',
-      size: 'wide',
-    },
-    {
-      titleKey: 'electricalMaintenance',
-      subtitleKey: 'electricalMaintenance',
-      tagKey: 'hardServices',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'plumbingServices',
-      subtitleKey: 'plumbingServices',
-      tagKey: 'hardServices',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'housekeepingServices',
-      subtitleKey: 'housekeepingServices',
-      tagKey: 'softServices',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
-      size: 'wide',
-    },
-  ],
-  manpower: [
-    {
-      titleKey: 'skilledTechnicians',
-      subtitleKey: 'skilledTechnicians',
-      tagKey: 'manpower',
-      type: 'video',
-      media: '/videos/skilled-technicians.mp4',
-      poster: '/images/skilled-technicians.jpg',
-      size: 'large',
-    },
-    {
-      titleKey: 'constructionWorkers',
-      subtitleKey: 'constructionWorkers',
-      tagKey: 'field',
-      type: 'video',
-      media: '/videos/construction-workers.mp4',
-      poster: '/images/construction-workers.jpg',
-      size: 'small',
-    },
-    {
-      titleKey: 'housekeepingStaff',
-      subtitleKey: 'housekeepingStaff',
-      tagKey: 'operations',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'warehouseLogisticsStaff',
-      subtitleKey: 'warehouseLogisticsStaff',
-      tagKey: 'logistics',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
-      size: 'wide',
-    },
-    {
-      titleKey: 'machineOperators',
-      subtitleKey: 'machineOperators',
-      tagKey: 'technical',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'officeAssistants',
-      subtitleKey: 'officeAssistants',
-      tagKey: 'admin',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'helpersLoaders',
-      subtitleKey: 'helpersLoaders',
-      tagKey: 'operations',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
-      size: 'wide',
-    },
-  ],
-  marketing: [
-    {
-      titleKey: 'posm',
-      subtitleKey: 'posm',
-      tagKey: 'marketing',
-      type: 'video',
-      media: '/videos/posm.mp4',
-      poster: '/images/posm.jpg',
-      size: 'large',
-    },
-    {
-      titleKey: 'businessCards',
-      subtitleKey: 'businessCards',
-      tagKey: 'print',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'flyersBooklets',
-      subtitleKey: 'flyersBooklets',
-      tagKey: 'print',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'prKits',
-      subtitleKey: 'prKits',
-      tagKey: 'brandAssets',
-      type: 'video',
-      media: '/videos/pr-kits.mp4',
-      poster: '/images/pr-kits.jpg',
-      size: 'wide',
-    },
-    {
-      titleKey: 'tissueBoxes',
-      subtitleKey: 'tissueBoxes',
-      tagKey: 'packaging',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'promoBoxes',
-      subtitleKey: 'promoBoxes',
-      tagKey: 'packaging',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
-      size: 'small',
-    },
-    {
-      titleKey: 'paperCups',
-      subtitleKey: 'paperCups',
-      tagKey: 'print',
-      type: 'image',
-      media: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80',
-      size: 'wide',
-    },
-  ],
-};
+import { ServiceCard } from './services/ServiceCard';
+import { ServiceMediaModal } from './services/ServiceMediaModal';
+import { ServiceTabs } from './services/ServiceTabs';
+import { serviceTabOrder, servicesData } from './services/servicesData';
+import { ServiceItemData, ServiceTabId } from './services/types';
 
 export default function Services() {
-  const [activeTab, setActiveTab] = useState<TabId>('facility');
+  const [activeTab, setActiveTab] = useState<ServiceTabId>('marketing');
+  const [selectedItem, setSelectedItem] = useState<ServiceItemData | null>(null);
+  const [hintTab, setHintTab] = useState<ServiceTabId | null>(null);
   const { isArabic, t } = useLanguage();
+  const tabs = useMemo(() => serviceTabOrder.map((tabId) => servicesData[tabId]), []);
+  const activeCategory = servicesData[activeTab];
+
+  const layoutClassName = {
+    split: 'grid gap-6 lg:grid-cols-2',
+    balanced: 'grid gap-6 lg:grid-cols-2',
+    compact: 'grid gap-6 lg:grid-cols-2',
+    wide: 'grid gap-6',
+  }[activeCategory.layout];
+
+  useEffect(() => {
+    setHintTab(null);
+
+    const timeout = window.setTimeout(() => {
+      const currentIndex = serviceTabOrder.indexOf(activeTab);
+      const nextTab = serviceTabOrder[(currentIndex + 1) % serviceTabOrder.length];
+      setHintTab(nextTab);
+    }, 5000);
+
+    return () => window.clearTimeout(timeout);
+  }, [activeTab]);
 
   return (
-    <section id="services" className="relative bg-[#f3f4f1] py-24 overflow-hidden">
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute -left-24 top-24 h-72 w-72 rounded-full bg-primary/12 blur-3xl" />
-        <div className="absolute -right-20 bottom-14 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
+    <motion.section
+      id="services"
+      className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(140,198,63,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(140,198,63,0.14),transparent_28%),linear-gradient(180deg,#f7f9f4_0%,#ffffff_100%)] py-22"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.18 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <motion.div
+          className="absolute -left-24 top-24 h-64 w-64 rounded-full bg-primary/5 blur-3xl"
+          animate={{ x: [0, 28, -10, 0], y: [0, -18, 12, 0], scale: [1, 1.08, 0.96, 1] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute right-[10%] bottom-[14%] h-72 w-72 rounded-full bg-primary/5 blur-3xl"
+          animate={{ x: [0, -20, 10, 0], y: [0, 10, -14, 0], scale: [1, 0.96, 1.04, 1] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        />
       </div>
 
       <div className="section-container relative z-10">
-        <div className={`mx-auto mb-12 max-w-3xl text-center ${isArabic ? 'md:text-right' : ''}`}>
-          <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-xs font-semibold tracking-[0.2em] text-primary">
+        <div className={`mx-auto mb-9 max-w-4xl text-center ${isArabic ? 'md:text-right' : ''}`}>
+          <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-[10px] font-semibold tracking-[0.16em] text-primary">
             {t.services.badge}
           </span>
-          <h2 className="mt-5 text-4xl font-bold text-text-main md:text-5xl">
+          <h2 className="mt-4 text-[2.8rem] font-bold leading-[1.02] text-text-main md:text-[3.75rem]">
             {t.services.title}
           </h2>
-          <p className="mt-4 text-text-muted">
+          <p className="mt-3 text-[15px] leading-7 text-text-muted md:text-base">
             {t.services.description}
           </p>
         </div>
 
-        <div className="mb-12 flex justify-center">
-          <div className="flex flex-wrap items-center justify-center gap-3 rounded-full bg-white/85 p-2 shadow-lg backdrop-blur-xl">
-            {(['facility', 'manpower', 'marketing'] as TabId[]).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className="relative rounded-full px-6 py-2.5 text-sm font-medium transition"
-              >
-                {activeTab === tab && (
-                  <motion.div
-                    layoutId="activeServicesTab"
-                    className="absolute inset-0 rounded-full bg-primary brand-shadow"
-                    transition={{ type: 'spring', stiffness: 320, damping: 30 }}
-                  />
-                )}
-                <span className={`relative z-10 ${activeTab === tab ? 'text-white' : 'text-gray-700'}`}>
-                  {t.services.tabs[tab]}
-                </span>
-              </button>
-            ))}
-          </div>
+        <div className="mb-7 flex justify-center">
+          <ServiceTabs
+            tabs={tabs}
+            activeTab={activeTab}
+            hintTab={hintTab}
+            isArabic={isArabic}
+            onChange={(tab) => {
+              setHintTab(null);
+              setActiveTab(tab);
+            }}
+          />
         </div>
 
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.45 }}
-            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 auto-rows-[170px] gap-5"
+            exit={{ opacity: 0, y: 12 }}
+            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
           >
-            {serviceGalleryData[activeTab].map((item, idx) => (
-              <motion.article
-                key={`${activeTab}-${item.titleKey}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.45, delay: idx * 0.05 }}
-                whileHover={{ y: -6, scale: 1.015 }}
-                className={`
-                  group relative overflow-hidden rounded-3xl
-                  bg-[#17181c]
-                  min-h-[170px]
-                  ${sizeClasses[item.size]}
-                `}
-              >
-                {item.type === 'video' ? (
-                  <video
-                    src={item.media}
-                    poster={item.poster}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    onError={(e) => {
-                      console.error(`Failed to load video: ${item.media}`);
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                ) : (
-                  <img
-                    src={item.media}
-                    alt={t.services.cards[item.titleKey].title}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                  />
-                )}
+            <div className="mb-5 text-center">
+              <span className="inline-flex rounded-full border border-primary/20 bg-white/70 px-3.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-primary shadow-[0_10px_24px_rgba(140,198,63,0.08)]">
+                {isArabic ? activeCategory.eyebrow.ar : activeCategory.eyebrow.en}
+              </span>
+              <p className="mx-auto mt-3 max-w-4xl text-[15px] leading-7 text-text-muted md:text-base">
+                {isArabic ? activeCategory.intro.ar : activeCategory.intro.en}
+              </p>
+            </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
-
-                <div className={`absolute bottom-0 z-10 p-6 ${isArabic ? 'right-0 text-right' : 'left-0 text-left'}`}>
-                  <div className="mb-3 inline-flex rounded-full bg-white/15 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-sm">
-                    {t.services.tags[item.tagKey]}
-                  </div>
-
-                  <h3 className="text-white text-2xl font-semibold leading-tight">
-                    {t.services.cards[item.titleKey].title}
-                  </h3>
-
-                  {item.subtitleKey && (
-                    <p className="mt-2 max-w-xs text-sm text-white/75">
-                      {t.services.cards[item.subtitleKey].subtitle}
-                    </p>
-                  )}
-                </div>
-              </motion.article>
-            ))}
+            <div className={layoutClassName}>
+              {activeCategory.groups.map((group) => (
+                <ServiceCard
+                  key={group.id}
+                  group={group}
+                  isArabic={isArabic}
+                  onSelectItem={setSelectedItem}
+                />
+              ))}
+            </div>
           </motion.div>
         </AnimatePresence>
+
+        <ServiceMediaModal
+          item={selectedItem}
+          isArabic={isArabic}
+          onClose={() => setSelectedItem(null)}
+        />
       </div>
-    </section>
+    </motion.section>
   );
 }
