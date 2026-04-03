@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, Film, ImageIcon } from 'lucide-react';
 import { ServiceGroupData, ServiceItemData } from './types';
 import { ServiceItem } from './ServiceItem';
+import { useLanguage } from '../../i18n';
 
 interface ServiceCardProps {
   group: ServiceGroupData;
@@ -11,6 +12,7 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ group, isArabic, onSelectItem }: ServiceCardProps) {
+  const { t } = useLanguage();
   const [hoveredItem, setHoveredItem] = useState<ServiceItemData | null>(null);
   const [selectedItem, setSelectedItem] = useState<ServiceItemData | null>(null);
   const title = isArabic ? group.title.ar : group.title.en;
@@ -96,7 +98,7 @@ export function ServiceCard({ group, isArabic, onSelectItem }: ServiceCardProps)
                         </div>
                         <p className="text-sm font-semibold text-text-main">{previewTitle}</p>
                         <p className="mt-1 text-xs text-text-muted">
-                          {isArabic ? 'المعاينة قريباً' : 'Preview coming soon'}
+                          {t.serviceDetails.previewComingSoon}
                         </p>
                       </div>
                     )}
@@ -104,7 +106,7 @@ export function ServiceCard({ group, isArabic, onSelectItem }: ServiceCardProps)
 
                   <div className={isArabic ? 'text-right' : 'text-left'}>
                     <div className="inline-flex rounded-full border border-primary/12 bg-white/75 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">
-                      {isArabic ? 'تفاصيل الخدمة' : 'Service Details'}
+                      {t.serviceDetails.serviceDetailLabel}
                     </div>
                     <h4 className="mt-3 text-lg font-semibold text-text-main">{previewTitle}</h4>
                     <p className="mt-2 max-w-xl text-sm leading-6 text-text-muted">
@@ -115,7 +117,7 @@ export function ServiceCard({ group, isArabic, onSelectItem }: ServiceCardProps)
                       onClick={() => onSelectItem(previewItem)}
                       className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/85 px-4 py-2 text-sm font-semibold text-primary transition hover:border-primary/25 hover:bg-white"
                     >
-                      <span>{isArabic ? 'فتح المعرض' : 'Open Gallery'}</span>
+                      <span>{t.serviceDetails.openGallery}</span>
                       <ArrowUpRight className="h-4 w-4" />
                     </button>
                   </div>

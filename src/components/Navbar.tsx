@@ -11,7 +11,7 @@ export default function Navbar() {
   const { phoneDisplay, phoneHref } = useRegionDetection();
 
   return (
-    <nav dir="ltr" className="fixed top-6 left-0 right-0 z-50 px-6">
+    <nav dir={isArabic ? 'rtl' : 'ltr'} className="fixed top-6 left-0 right-0 z-50 px-6">
       <div className="max-w-7xl mx-auto bg-white/80 backdrop-blur-md border border-gray-100 rounded-[2rem] shadow-sm overflow-hidden">
         <div className="flex items-center justify-between py-3 px-8">
           {/* Logo */}
@@ -107,11 +107,11 @@ export default function Navbar() {
                 brand-shadow
                 hover:shadow-[0_12px_35px_rgba(140,198,63,0.35)]
               "
-              aria-label={`Call us at ${phoneDisplay}`}
+              aria-label={`${t.common.call} ${phoneDisplay}`}
             >
               <span className="relative z-10 flex items-center gap-2">
                 <Phone size={18} className="transition-transform duration-250 group-hover:translate-x-1" />
-                <span className="text-sm">Contact Us</span>
+                <span className="text-sm">{t.common.contactUs}</span>
               </span>
               <span className="relative z-10 text-xs font-medium opacity-95">
                 {phoneDisplay}
@@ -135,10 +135,10 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.25 }}
               className="flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white brand-shadow hover:shadow-[0_10px_28px_rgba(140,198,63,0.3)]"
-              aria-label={`Call us at ${phoneDisplay}`}
+              aria-label={`${t.common.call} ${phoneDisplay}`}
             >
               <Phone size={16} />
-              <span>Call</span>
+              <span>{t.common.callNow}</span>
             </motion.a>
 
             {/* Mobile Menu Toggle */}

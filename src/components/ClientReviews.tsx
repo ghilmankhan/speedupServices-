@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { Quote, ChevronLeft, ChevronRight, Linkedin } from 'lucide-react';
 import { useLanguage } from '../i18n';
-import { clientReviews } from './ClientReviewsData';
 
 export default function ClientReviews() {
   const { isArabic, t } = useLanguage();
@@ -10,7 +9,8 @@ export default function ClientReviews() {
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<number | null>(null);
 
-  const length = clientReviews.length;
+  const reviews = t.clientReviews.reviews;
+  const length = reviews.length;
 
   useEffect(() => {
     if (isPaused) return;
@@ -38,7 +38,7 @@ export default function ClientReviews() {
     return () => window.removeEventListener('keydown', handler);
   }, [length]);
 
-  const cards = useMemo(() => clientReviews, []);
+  const cards = useMemo(() => reviews, [reviews]);
 
   const getCardStyles = (index: number) => {
     const diff = (index - activeIndex + length) % length;
@@ -82,7 +82,7 @@ export default function ClientReviews() {
       className="relative py-24 bg-bg-light overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      aria-label="Client testimonials"
+      aria-label={t.clientReviews.title}
     >
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute left-1/2 top-10 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
@@ -90,9 +90,9 @@ export default function ClientReviews() {
 
       <div className="section-container relative">
         <div className="text-center mb-12">
-          <p className="text-sm uppercase tracking-widest font-semibold text-primary">CLIENT TESTIMONIALS</p>
-          <h2 className="text-3xl sm:text-4xl font-bold mt-3">Trusted by Businesses. Backed by Results.</h2>
-          <p className="text-text-muted max-w-2xl mx-auto mt-4">Long-term partnerships built through trust, speed, quality, and measurable outcomes.</p>
+          <p className="text-sm uppercase tracking-widest font-semibold text-primary">{t.clientReviews.title}</p>
+          <h2 className="text-3xl sm:text-4xl font-bold mt-3">{t.clientReviews.subtitle}</h2>
+          <p className="text-text-muted max-w-2xl mx-auto mt-4">{t.clientReviews.description}</p>
         </div>
 
         <div className="relative overflow-hidden">
@@ -118,18 +118,18 @@ export default function ClientReviews() {
                 >
                   <div className={`h-full rounded-3xl bg-white border border-gray-100 p-6 md:p-8 ${styles.opacity === 1 ? 'ring-1 ring-primary/30' : ''}`}>
                     <div className="flex items-center justify-between mb-4 text-text-muted">
-                      <span className="text-sm font-semibold text-text-main">{item.companyName}</span>
+                      <span className="text-sm font-semibold text-text-main">{item.companyName[isArabic ? 'ar' : 'en']}</span>
                       <span className="text-xs text-text-muted">• • •</span>
                     </div>
                     <div className="mb-5 text-2xl text-primary/20">
                       <Quote size={28} />
                     </div>
-                    <p className="text-text-main text-base md:text-lg leading-relaxed mb-6">{item.testimonial}</p>
+                    <p className="text-text-main text-base md:text-lg leading-relaxed mb-6">{item.testimonial[isArabic ? 'ar' : 'en']}</p>
                     <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-                      <div className="h-10 w-10 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold">{item.clientName.charAt(0)}</div>
+                      <div className="h-10 w-10 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold">{item.clientName[isArabic ? 'ar' : 'en'].charAt(0)}</div>
                       <div className="">
-                        <p className="font-semibold text-text-main">{item.clientName}</p>
-                        <p className="text-sm text-text-muted">{item.clientTitle}</p>
+                        <p className="font-semibold text-text-main">{item.clientName[isArabic ? 'ar' : 'en']}</p>
+                        <p className="text-sm text-text-muted">{item.clientTitle[isArabic ? 'ar' : 'en']}</p>
                       </div>
                       <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="ml-auto text-primary hover:text-primary-dark">
                         <Linkedin size={18} />

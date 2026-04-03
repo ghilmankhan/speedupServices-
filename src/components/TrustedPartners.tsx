@@ -2,44 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { useLanguage } from '../i18n';
 
-const trustedCompanies = [
-  {
-    id: 'ghg',
-    name: 'Gulf Horizon Group',
-    label: 'Facility Management',
-    variant: 'circle'
-  },
-  {
-    id: 'rbs',
-    name: 'Riyadh Business Solutions',
-    label: 'Digital & Consulting',
-    variant: 'square'
-  },
-  {
-    id: 'spl',
-    name: 'Saudi Prime Logistics',
-    label: 'Supply Chain & Logistics',
-    variant: 'triangle'
-  },
-  {
-    id: 'anf',
-    name: 'Al Noor Facilities',
-    label: 'Integrated Facility Services',
-    variant: 'hex'
-  },
-  {
-    id: 'vem',
-    name: 'Vision Edge Media',
-    label: 'Media & Branding',
-    variant: 'line'
-  },
-  {
-    id: 'afp',
-    name: 'Apex Financial Partners',
-    label: 'Financial Advisory',
-    variant: 'grid'
-  }
-];
+// Trusted company cards now use translation keys from t.trustedPartners.companies to guarantee full bilingual content.
 
 function LogoMark({ variant }: { variant: string }) {
   const common = 'relative flex items-center justify-center w-14 h-14 rounded-xl border border-gray-200 text-text-main';
@@ -93,7 +56,8 @@ function LogoMark({ variant }: { variant: string }) {
 }
 
 export default function TrustedPartners() {
-  const { t } = useLanguage();
+  const { isArabic, t } = useLanguage();
+  const companies = t.trustedPartners.companies;
 
   return (
     <section id="trusted" className="py-20 bg-bg-light overflow-hidden">
@@ -138,7 +102,7 @@ export default function TrustedPartners() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-stretch">
-          {trustedCompanies.map((company, index) => (
+          {companies.map((company, index) => (
             <motion.article
               key={company.id}
               initial={{ opacity: 0, y: 30 }}
@@ -159,8 +123,8 @@ export default function TrustedPartners() {
                 <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/0 via-primary/0 to-primary/20 opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
               </div>
 
-              <h3 className="text-base font-semibold text-text-main transition-colors duration-250 group-hover:text-primary mb-1">{company.name}</h3>
-              <p className="text-sm text-text-muted">{company.label}</p>
+              <h3 className="text-base font-semibold text-text-main transition-colors duration-250 group-hover:text-primary mb-1">{company.name[isArabic ? 'ar' : 'en']}</h3>
+              <p className="text-sm text-text-muted">{company.label[isArabic ? 'ar' : 'en']}</p>
 
               <motion.span
                 layout

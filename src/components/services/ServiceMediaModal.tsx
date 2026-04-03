@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronLeft, ChevronRight, Film, ImageIcon, X } from 'lucide-react';
 import { ServiceItemData } from './types';
+import { useLanguage } from '../../i18n';
 
 interface ServiceMediaModalProps {
   item: ServiceItemData | null;
@@ -10,6 +11,7 @@ interface ServiceMediaModalProps {
 }
 
 export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModalProps) {
+  const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModal
             type="button"
             onClick={onClose}
             className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-slate-950/65 text-white transition hover:bg-slate-950"
-            aria-label={isArabic ? 'إغلاق' : 'Close'}
+            aria-label={t.common.close}
           >
             <X className="h-5 w-5" />
           </button>
@@ -92,7 +94,7 @@ export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModal
                   </div>
                   <h4 className="text-2xl font-semibold text-text-main">{title}</h4>
                   <p className="mt-4 text-sm leading-7 text-text-muted">
-                    {isArabic ? 'الوسائط قيد الإعداد حالياً وسيتم إضافتها قريباً.' : 'Media coming soon. This service is ready for images and video once the final assets are approved.'}
+                    {t.serviceDetails.previewComingSoon}
                   </p>
                 </div>
               )}
@@ -122,18 +124,18 @@ export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModal
             <div className={`flex flex-col justify-between bg-white p-8 lg:p-10 ${isArabic ? 'text-right' : 'text-left'}`}>
               <div>
                 <span className="inline-flex rounded-full border border-primary/15 bg-primary/8 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                  {isArabic ? 'تفاصيل الخدمة' : 'Service Detail'}
+                  {t.serviceDetails.serviceDetailLabel}
                 </span>
                 <h3 className="mt-5 text-3xl font-semibold text-text-main">{title}</h3>
                 <p className="mt-4 text-base leading-8 text-text-muted">{description}</p>
               </div>
 
               <div className="mt-8 rounded-[1.5rem] border border-slate-200 bg-slate-50/80 p-5">
-                <p className="text-sm font-semibold text-text-main">{isArabic ? 'حالة الوسائط' : 'Media Status'}</p>
+                <p className="text-sm font-semibold text-text-main">{t.serviceDetails.mediaStatus}</p>
                 <p className="mt-2 text-sm leading-7 text-text-muted">
                   {hasMedia
-                    ? (isArabic ? 'تتوفر وسائط مرتبطة بهذه الخدمة ويمكن توسيع المعرض بسهولة من خلال كائن البيانات.' : 'Media is available for this service and the gallery can be expanded easily from the data object.')
-                    : (isArabic ? 'لا توجد وسائط نهائية حتى الآن. أضف الصور أو الفيديوهات لاحقاً داخل مجلدات الخدمات وسيظهر المعرض مباشرة.' : 'No final media is attached yet. Add images or videos later inside the service folders and the gallery will render immediately.')}
+                    ? t.serviceDetails.mediaAvailable
+                    : t.serviceDetails.mediaUnavailable}
                 </p>
               </div>
 
