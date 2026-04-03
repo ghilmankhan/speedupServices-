@@ -1,11 +1,12 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import TrustedPartners from './components/TrustedPartners';
 import About from './components/About';
 import Services from './components/Services';
-import VisionMission from './components/VisionMission';
 import Industries from './components/Industries';
 import WhyChooseUs from './components/WhyChooseUs';
+import ClientReviews from './components/ClientReviews';
 import Compliance from './components/Compliance';
 import QuoteForm from './components/QuoteForm';
 import Footer from './components/Footer';
@@ -19,11 +20,12 @@ export default function App() {
         <Navbar />
         <main>
           <Hero />
+          <TrustedPartners />
           <About />
-          <VisionMission />
           <Services />
           <Industries />
           <WhyChooseUs />
+          <ClientReviews />
           <Compliance />
           <QuoteForm />
         </main>

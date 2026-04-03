@@ -69,6 +69,11 @@ export const translations = {
         'At Speedup Services, we accelerate business success by delivering seamless, end-to-end solutions across marketing, creative, and digital services, supported by reliable logistics, efficient facility management, and skilled manpower. We are committed to speed, quality, and innovation—helping our clients stay ahead in a rapidly evolving world.',
       tagline: 'Built for Speed. Designed for Success.',
     },
+    trustedPartners: {
+      title: 'Trusted by leading Saudi organizations',
+      subtitle: 'Proven experience in corporate operations and supply chain',
+      description: 'Our partners rely on Speedup Services for consistent quality, rapid deployment and measurable operational results.',
+    },
     services: {
       badge: 'OUR SERVICES',
       title: 'Explore Our Services',
@@ -365,6 +370,11 @@ export const translations = {
       missionText:
         'في سبيد أب سيرفيسز، نسرّع نجاح الأعمال من خلال تقديم حلول سلسة ومتكاملة من البداية إلى النهاية في مجالات التسويق والإبداع والخدمات الرقمية، مدعومة بخدمات لوجستية موثوقة وإدارة مرافق فعالة وقوى عاملة ماهرة. نحن ملتزمون بالسرعة والجودة والابتكار، لمساعدة عملائنا على البقاء في الصدارة في عالم سريع التطور.',
       tagline: 'مصممون للسرعة. ومبنيون للنجاح.',
+    },
+    trustedPartners: {
+      title: 'تحظى بثقة مؤسسات سعودية رائدة',
+      subtitle: 'خبرة مثبَتة في العمليات المؤسسية وسلسلة الإمداد',
+      description: 'يعتمد شركاؤنا على سرعة خدمات سبيد أب وجودتها العالية ونتائجها التشغيلية الملموسة.',
     },
     services: {
       badge: 'خدماتنا',
