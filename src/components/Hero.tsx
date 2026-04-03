@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
 import GradientAnimatedButton from './GradientAnimatedButton';
 import { useLanguage } from '../i18n';
 
@@ -161,9 +162,9 @@ export default function Hero() {
                 }
               >
                 {t.hero.primaryCta}
-                <span className="text-xl ml-1 group-hover:translate-x-1 transition">
-                  →
-                </span>
+                <ArrowRight
+                  className={`h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1 ${isArabic ? 'rotate-180' : ''}`}
+                />
               </GradientAnimatedButton>
             </div>
           </motion.div>

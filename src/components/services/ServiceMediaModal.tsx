@@ -38,6 +38,9 @@ export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModal
   const title = isArabic ? item.title.ar : item.title.en;
   const description = isArabic ? item.description.ar : item.description.en;
   const gallery = item.gallery || [];
+
+  const nextMediaIcon = isArabic ? ChevronLeft : ChevronRight;
+  const prevMediaIcon = isArabic ? ChevronRight : ChevronLeft;
   const hasMedia = gallery.length > 0;
   const activeAsset = hasMedia ? gallery[activeIndex] : null;
 
@@ -107,7 +110,7 @@ export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModal
                     className="absolute left-5 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-slate-700 shadow-lg transition hover:bg-white"
                     aria-label={isArabic ? 'السابق' : 'Previous'}
                   >
-                    <ChevronLeft className="h-5 w-5" />
+                    {React.createElement(prevMediaIcon, { className: 'h-5 w-5' })}
                   </button>
                   <button
                     type="button"
@@ -115,7 +118,7 @@ export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModal
                     className="absolute right-5 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-slate-700 shadow-lg transition hover:bg-white"
                     aria-label={isArabic ? 'التالي' : 'Next'}
                   >
-                    <ChevronRight className="h-5 w-5" />
+                    {React.createElement(nextMediaIcon, { className: 'h-5 w-5' })}
                   </button>
                 </>
               )}
