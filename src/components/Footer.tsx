@@ -6,7 +6,7 @@ export default function Footer() {
   const { isArabic, t } = useLanguage();
 
   return (
-    <footer className="bg-footer-bg text-white py-20">
+    <footer className="bg-site-footer text-white py-20">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
           {/* Brand */}

@@ -20,12 +20,10 @@ export default function Hero() {
     <section
       id="home"
       onMouseMove={handleMouseMove}
-      className="relative min-h-[92vh] flex items-center pt-10 lg:pt-16 bg-[#f3f4f1] overflow-hidden"
+      className="bg-site-hero relative min-h-[92vh] flex items-center pt-10 lg:pt-16 overflow-hidden"
     >
       {/* ================= BACKGROUND ================= */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,#f3f4f1_0%,#eef1e9_60%,#e8ece3_100%)]" />
-
         <div className="absolute inset-x-0 bottom-[-2%] h-[42%] overflow-hidden lg:h-[46%]">
           <motion.div
             className="absolute bottom-[4%] left-0 flex h-full w-[200%]"
@@ -105,7 +103,7 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-[#eef4e3]/20 to-[#f3f4f1]" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-[#eef4e3]/20 to-[#f3f6ef]" />
       </div>
 
       {/* ================= CONTENT ================= */}

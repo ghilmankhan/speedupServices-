@@ -37,7 +37,7 @@ export default function Services() {
   return (
     <motion.section
       id="services"
-      className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(140,198,63,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(140,198,63,0.14),transparent_28%),linear-gradient(180deg,#f7f9f4_0%,#ffffff_100%)] py-22"
+      className="bg-site-services relative overflow-hidden py-22"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.18 }}

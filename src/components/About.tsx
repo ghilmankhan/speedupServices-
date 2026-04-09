@@ -6,8 +6,9 @@ export default function About() {
   const { isArabic, t } = useLanguage();
 
   return (
-    <section id="about" className="section-container">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section id="about" className="bg-site-about">
+      <div className="section-container">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -40,6 +41,7 @@ export default function About() {
           {/* Decorative elements */}
           <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary rounded-2xl -z-10 blur-2xl opacity-30" />
         </motion.div>
+        </div>
       </div>
     </section>
   );

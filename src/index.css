@@ -82,6 +82,67 @@
 }
 
 @layer utilities {
+  .bg-site-hero {
+    background:
+      radial-gradient(circle at 20% 30%, rgba(156, 211, 74, 0.10), transparent 35%),
+      radial-gradient(circle at 80% 70%, rgba(140, 190, 70, 0.08), transparent 40%),
+      linear-gradient(180deg, #F7F9F5 0%, #F3F6EF 100%);
+  }
+
+  .bg-site-about {
+    background:
+      radial-gradient(circle at 75% 50%, rgba(146, 197, 63, 0.08), transparent 40%),
+      linear-gradient(180deg, #F8F8F5 0%, #F4F7F0 100%);
+  }
+
+  .bg-site-why {
+    background:
+      linear-gradient(90deg, #F7F8F5 0%, #F7F8F5 55%, #F2F6EC 100%);
+  }
+
+  .bg-site-services {
+    background:
+      radial-gradient(circle at 10% 30%, rgba(146, 197, 63, 0.08), transparent 30%),
+      radial-gradient(circle at 90% 70%, rgba(146, 197, 63, 0.06), transparent 35%),
+      linear-gradient(180deg, #F8FAF6 0%, #F5F8F2 100%);
+  }
+
+  .bg-site-industries {
+    background:
+      radial-gradient(circle at center top, rgba(146, 197, 63, 0.05), transparent 35%),
+      linear-gradient(180deg, #FAFAF8 0%, #F5F7F3 100%);
+  }
+
+  .bg-site-trusted {
+    background:
+      radial-gradient(circle at center, rgba(146, 197, 63, 0.05), transparent 45%),
+      linear-gradient(180deg, #F4F7EF 0%, #F8F9F6 100%);
+  }
+
+  .bg-site-testimonials {
+    background:
+      radial-gradient(circle at center 70%, rgba(146, 197, 63, 0.06), transparent 30%),
+      linear-gradient(180deg, #F8F9F5 0%, #F3F5EF 100%);
+  }
+
+  .bg-site-compliance {
+    background:
+      radial-gradient(circle at 50% 20%, rgba(146, 197, 63, 0.08), transparent 30%),
+      linear-gradient(180deg, #0D0F11 0%, #121417 100%);
+  }
+
+  .bg-site-quote {
+    background:
+      radial-gradient(circle at 75% 40%, rgba(146, 197, 63, 0.06), transparent 35%),
+      linear-gradient(180deg, #F9FAF7 0%, #F4F7F0 100%);
+  }
+
+  .bg-site-footer {
+    background:
+      radial-gradient(circle at 15% 10%, rgba(146, 197, 63, 0.08), transparent 30%),
+      linear-gradient(180deg, #0B0D0F 0%, #101317 100%);
+  }
+
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;

@@ -198,7 +198,8 @@ export default function QuoteForm() {
   };
 
   return (
-    <section id="quote" className="section-container">
+    <section id="quote" className="bg-site-quote">
+      <div className="section-container">
       <div className={`text-center mb-16 ${isArabic ? 'md:text-right' : ''}`}>
         <h2 className="text-4xl font-bold mb-6">{t.quoteForm.title}</h2>
         <p className="text-text-muted max-w-4xl mx-auto">
@@ -501,6 +502,7 @@ export default function QuoteForm() {
             </div>
           )}
         </div>
+      </div>
       </div>
     </section>
   );

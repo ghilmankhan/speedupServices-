@@ -7,7 +7,7 @@ export default function TrustedPartners() {
   const companies = t.trustedPartners.companies;
 
   return (
-    <section id="trusted" className="py-20 bg-bg-light overflow-hidden">
+    <section id="trusted" className="bg-site-trusted py-20 overflow-hidden">
       <div className="section-container">
         <div className="text-center mb-12">
           <motion.p

@@ -16,7 +16,7 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section className="py-24">
+    <section className="bg-site-why py-24">
       <div className="section-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div

@@ -17,7 +17,7 @@ export default function Industries() {
   ];
 
   return (
-    <section id="industries" className="py-24 bg-bg-light">
+    <section id="industries" className="bg-site-industries py-24">
       <div className="section-container">
         <div className={`text-center mb-16 ${isArabic ? 'md:text-right' : ''}`}>
           <h2 className="text-4xl font-bold mb-4">{t.industries.title}</h2>
