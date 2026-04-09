@@ -2,59 +2,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { useLanguage } from '../i18n';
 
-// Trusted company cards now use translation keys from t.trustedPartners.companies to guarantee full bilingual content.
-
-function LogoMark({ variant }: { variant: string }) {
-  const common = 'relative flex items-center justify-center w-14 h-14 rounded-xl border border-gray-200 text-text-main';
-
-  if (variant === 'circle') {
-    return (
-      <div className={`${common} bg-white`}>
-        <div className="absolute inset-0 rounded-full border border-primary/20" />
-        <div className="relative z-10 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">GH</div>
-      </div>
-    );
-  }
-
-  if (variant === 'square') {
-    return (
-      <div className={`${common} bg-white p-1`}>
-        <div className="relative z-10 w-8 h-8 rounded-sm border border-primary/25 bg-primary/5 flex items-center justify-center text-xs font-bold text-primary">RB</div>
-      </div>
-    );
-  }
-
-  if (variant === 'triangle') {
-    return (
-      <div className={`${common} bg-white p-1`}>
-        <div className="relative z-10 w-0 h-0 border-l-4 border-r-4 border-b-8 border-l-transparent border-r-transparent border-b-primary/20" />
-      </div>
-    );
-  }
-
-  if (variant === 'hex') {
-    return (
-      <div className={`${common} bg-white p-1`}>
-        <div className="relative z-10 w-8 h-8 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-xs font-bold text-primary">AN</div>
-      </div>
-    );
-  }
-
-  if (variant === 'line') {
-    return (
-      <div className={`${common} bg-white p-1`}>
-        <div className="relative z-10 w-8 h-8 border-t-2 border-b-2 border-primary/20 flex items-center justify-center text-xs font-bold text-primary">VE</div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={`${common} bg-white`}>
-      <div className="relative z-10 w-8 h-8 bg-primary/10 rounded-md flex items-center justify-center text-xs font-bold text-primary">AP</div>
-    </div>
-  );
-}
-
 export default function TrustedPartners() {
   const { isArabic, t } = useLanguage();
   const companies = t.trustedPartners.companies;
@@ -101,7 +48,7 @@ export default function TrustedPartners() {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-stretch">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
           {companies.map((company, index) => (
             <motion.article
               key={company.id}
@@ -110,25 +57,43 @@ export default function TrustedPartners() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8, delay: 0.35 + index * 0.08, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -8, scale: 1.03 }}
-              className="group relative min-h-[165px] rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-xl shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_34px_rgba(0,0,0,0.12)] border-primary/10 hover:border-primary/30 p-5 flex flex-col items-center text-center transition-all duration-300"
+              className="group relative min-h-[235px] rounded-3xl border border-primary/10 bg-white/95 px-6 pt-8 pb-6 text-center backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] transition-all duration-500 hover:-translate-y-2 hover:border-primary/30 hover:shadow-[0_22px_50px_rgba(140,198,63,0.16)]"
             >
-              <div className="relative mb-4">
-                <motion.div
-                  whileHover={{ scale: 1.08, rotate: 3 }}
-                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="inline-flex items-center justify-center"
-                >
-                  <LogoMark variant={company.variant} />
-                </motion.div>
-                <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/0 via-primary/0 to-primary/20 opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
-              </div>
+              <div className="absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_center,rgba(140,198,63,0.18),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="relative z-10 flex h-full flex-col items-center justify-center">
+                <div className="relative mb-5 flex h-[72px] w-full items-center justify-center">
+                  <div
+                    className={`flex items-center justify-center transition-all duration-500 ${company.logoWrapperClass} ${
+                      company.useDarkLogoPanel
+                        ? 'relative overflow-hidden rounded-2xl px-5 py-3 border border-[#2D6E3F] bg-[#1F5E34] shadow-[0_14px_34px_rgba(31,94,52,0.26)] transition-all duration-500 group-hover:bg-[#2E7D32] group-hover:border-[#8BCF2F] group-hover:shadow-[0_18px_42px_rgba(140,198,63,0.28)]'
+                        : ''
+                    }`}
+                  >
+                    {company.useDarkLogoPanel && (
+                      <div className="pointer-events-none absolute inset-0 rounded-2xl">
+                        <div className="absolute inset-x-0 top-0 h-[45%] rounded-t-2xl bg-white/10" />
+                        <div className="absolute -top-6 left-1/2 h-10 w-16 -translate-x-1/2 rounded-full bg-[#A8E632]/18 blur-xl" />
+                      </div>
+                    )}
+                    <img
+                      src={company.logo}
+                      alt={company.name[isArabic ? 'ar' : 'en']}
+                      className={`relative z-10 ${company.logoClass} transition-all duration-500 group-hover:scale-105`}
+                    />
+                  </div>
+                </div>
 
-              <h3 className="text-base font-semibold text-text-main transition-colors duration-250 group-hover:text-primary mb-1">{company.name[isArabic ? 'ar' : 'en']}</h3>
-              <p className="text-sm text-text-muted">{company.label[isArabic ? 'ar' : 'en']}</p>
+                <h3 className="mb-1 text-[13px] font-semibold text-text-main transition-colors duration-250 group-hover:text-primary sm:text-sm">
+                  {company.name[isArabic ? 'ar' : 'en']}
+                </h3>
+                <p className="text-[13px] text-text-muted sm:text-sm">
+                  {company.label[isArabic ? 'ar' : 'en']}
+                </p>
+              </div>
 
               <motion.span
                 layout
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 h-0.5 w-12 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute bottom-5 left-1/2 h-0.5 w-12 -translate-x-1/2 rounded-full bg-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100"
               />
             </motion.article>
           ))}

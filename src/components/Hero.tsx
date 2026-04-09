@@ -127,11 +127,12 @@ export default function Hero() {
             transition={{ delay: 0.1, duration: 0.8, ease: 'easeOut' }}
             className="text-[#17181c] text-4xl sm:text-5xl md:text-7xl font-bold leading-[1.02] tracking-[-0.04em] mb-8 max-w-5xl"
           >
-            {t.hero.titlePrefix}{' '}
-            <span className="text-primary relative">
-              {t.hero.titleHighlight}
-              {/* subtle underline glow */}
-              <span className="absolute left-0 bottom-0 w-full h-[6px] bg-primary/30 blur-md"></span>
+            <span className="block text-text-main">
+              {t.hero.titleLine1}
+            </span>
+            <span className="relative block text-primary">
+              {t.hero.titleLine2}
+              <span className="absolute left-0 bottom-0 h-[6px] w-full bg-primary/30 blur-md" />
             </span>
           </motion.h1>
 

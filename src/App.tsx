@@ -20,11 +20,11 @@ export default function App() {
         <Navbar />
         <main>
           <Hero />
-          <TrustedPartners />
           <About />
           <Services />
           <Industries />
           <WhyChooseUs />
+          <TrustedPartners />
           <ClientReviews />
           <Compliance />
           <QuoteForm />

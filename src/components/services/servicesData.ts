@@ -164,11 +164,11 @@ export const servicesData: Record<ServiceTabId, ServiceCategoryData> = {
   },
   logistics: {
     id: 'logistics',
-    label: { en: 'Logistics', ar: 'الخدمات اللوجستية' },
+    label: { en: 'Logistics Services', ar: 'الخدمات اللوجستية' },
     eyebrow: { en: 'Reliable Movement', ar: 'حركة موثوقة' },
     intro: {
-      en: 'Operational logistics built for reliability, visibility and scalable execution across Saudi distribution networks.',
-      ar: 'حلول لوجستية تشغيلية مبنية على الاعتمادية والوضوح وقابلية التوسع عبر شبكات التوزيع في المملكة.',
+      en: 'Operational logistics services built for reliability, visibility and scalable execution across Saudi distribution networks.',
+      ar: 'خدمات لوجستية تشغيلية مبنية على الاعتمادية والوضوح وقابلية التوسع عبر شبكات التوزيع في المملكة.',
     },
     layout: 'compact',
     groups: [

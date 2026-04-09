@@ -80,3 +80,14 @@
     box-shadow: 0 10px 30px rgba(140, 198, 63, 0.25);
   }
 }
+
+@layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}

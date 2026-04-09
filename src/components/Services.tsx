@@ -69,7 +69,7 @@ export default function Services() {
           </p>
         </div>
 
-        <div className="mb-7 flex justify-center">
+        <div className="mb-8">
           <ServiceTabs
             tabs={tabs}
             activeTab={activeTab}
