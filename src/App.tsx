@@ -10,6 +10,7 @@ import ClientReviews from './components/ClientReviews';
 import Compliance from './components/Compliance';
 import QuoteForm from './components/QuoteForm';
 import Footer from './components/Footer';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { LanguageProvider } from './i18n';
 
 // Main Application Component
@@ -17,19 +18,41 @@ export default function App() {
   return (
     <LanguageProvider>
       <div className="min-h-screen">
-        <Navbar />
+        <ErrorBoundary sectionName="Navbar">
+          <Navbar />
+        </ErrorBoundary>
         <main>
-          <Hero />
-          <About />
-          <Services />
-          <Industries />
-          <WhyChooseUs />
-          <TrustedPartners />
-          <ClientReviews />
-          <Compliance />
-          <QuoteForm />
+          <ErrorBoundary sectionName="Hero">
+            <Hero />
+          </ErrorBoundary>
+          <ErrorBoundary sectionName="About">
+            <About />
+          </ErrorBoundary>
+          <ErrorBoundary sectionName="Services">
+            <Services />
+          </ErrorBoundary>
+          <ErrorBoundary sectionName="Industries">
+            <Industries />
+          </ErrorBoundary>
+          <ErrorBoundary sectionName="WhyChooseUs">
+            <WhyChooseUs />
+          </ErrorBoundary>
+          <ErrorBoundary sectionName="TrustedPartners">
+            <TrustedPartners />
+          </ErrorBoundary>
+          <ErrorBoundary sectionName="ClientReviews">
+            <ClientReviews />
+          </ErrorBoundary>
+          <ErrorBoundary sectionName="Compliance">
+            <Compliance />
+          </ErrorBoundary>
+          <ErrorBoundary sectionName="QuoteForm">
+            <QuoteForm />
+          </ErrorBoundary>
         </main>
-        <Footer />
+        <ErrorBoundary sectionName="Footer">
+          <Footer />
+        </ErrorBoundary>
       </div>
     </LanguageProvider>
   );

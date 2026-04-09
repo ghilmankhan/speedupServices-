@@ -64,10 +64,10 @@ export default function Footer() {
           <div className={`space-y-6 ${isArabic ? 'text-right' : 'text-left'}`}>
             <h3 className="text-lg font-bold">{t.footer.followTitle}</h3>
             <div className="flex gap-4">
-              <a href="https://www.facebook.com/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors" aria-label="Visit our Facebook page">
+              <a href="https://www.facebook.com/profile.php?id=61570820061306" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors" aria-label="Visit our Facebook page">
                 <Facebook size={20} />
               </a>
-              <a href="https://www.linkedin.com/company/speedupservices" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors" aria-label="Visit our LinkedIn page">
+              <a href="https://www.linkedin.com/in/speedup-servicesofficial-624326402" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white transition-colors" aria-label="Visit our LinkedIn page">
                 <Linkedin size={20} />
               </a>
             </div>

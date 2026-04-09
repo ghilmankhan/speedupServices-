@@ -161,7 +161,7 @@ export default function ClientReviews() {
                         <p className="font-semibold text-[16px] sm:text-[18px] leading-tight text-text-main">{item.clientName[isArabic ? 'ar' : 'en']}</p>
                         <p className="text-[13px] sm:text-sm leading-5 text-text-muted mt-1 max-w-[220px]">{item.clientTitle[isArabic ? 'ar' : 'en']}</p>
                       </div>
-                      <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className={`${isArabic ? 'mr-3' : 'ml-3'} flex-shrink-0 text-primary/70 hover:text-primary transition-colors duration-300`}>
+                      <a href="https://www.linkedin.com/in/speedup-servicesofficial-624326402" target="_blank" rel="noopener noreferrer" className={`${isArabic ? 'mr-3' : 'ml-3'} flex-shrink-0 text-primary/70 hover:text-primary transition-colors duration-300`}>
                         <Linkedin size={16} />
                       </a>
                     </div>

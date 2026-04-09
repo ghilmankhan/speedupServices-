@@ -19,7 +19,7 @@ function SocialLinks({
   return (
     <div className="flex items-center gap-3">
       <motion.a
-        href="https://www.facebook.com/speedupservices"
+        href="https://www.facebook.com/profile.php?id=61570820061306"
         target="_blank"
         rel="noopener noreferrer"
         whileHover={{ scale: 1.06 }}
@@ -29,7 +29,7 @@ function SocialLinks({
         <Facebook size={iconSize} />
       </motion.a>
       <motion.a
-        href="https://www.linkedin.com/company/speedupservices"
+        href="https://www.linkedin.com/in/speedup-servicesofficial-624326402"
         target="_blank"
         rel="noopener noreferrer"
         whileHover={{ scale: 1.06 }}
