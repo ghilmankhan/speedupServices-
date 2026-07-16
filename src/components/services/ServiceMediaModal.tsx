@@ -87,6 +87,7 @@ export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModal
                       src={activeAsset.src}
                       alt={isArabic ? activeAsset.alt.ar : activeAsset.alt.en}
                       className="h-full max-h-[460px] w-full rounded-[1.5rem] border border-white/70 object-cover shadow-[0_18px_60px_rgba(15,23,42,0.12)]"
+                      decoding="async"
                     />
                   )}
                 </div>
@@ -156,6 +157,8 @@ export function ServiceMediaModal({ item, isArabic, onClose }: ServiceMediaModal
                           src={asset.src}
                           alt={isArabic ? asset.alt.ar : asset.alt.en}
                           className="h-full w-full object-cover"
+                          loading="lazy"
+                          decoding="async"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-slate-900 text-white">

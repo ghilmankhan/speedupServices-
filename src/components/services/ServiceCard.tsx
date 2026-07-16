@@ -89,6 +89,8 @@ export function ServiceCard({ group, isArabic, onSelectItem }: ServiceCardProps)
                           src={previewAsset.src}
                           alt={isArabic ? previewAsset.alt.ar : previewAsset.alt.en}
                           className="h-40 w-full object-cover"
+                          loading="lazy"
+                          decoding="async"
                         />
                       )
                     ) : (

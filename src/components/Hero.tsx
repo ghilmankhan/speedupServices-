@@ -1,11 +1,14 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import GradientAnimatedButton from './GradientAnimatedButton';
 import { useLanguage } from '../i18n';
 
 export default function Hero() {
   const { isArabic, t } = useLanguage();
+  const shouldReduceMotion = useReducedMotion();
+  const entranceTransition = (transition: Record<string, unknown>) =>
+    shouldReduceMotion ? { duration: 0 } : transition;
 
   return (
     <section
@@ -16,8 +19,8 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-x-0 bottom-[-2%] h-[42%] overflow-hidden lg:h-[46%]">
           <div
-            className="absolute bottom-[4%] left-0 flex h-full w-[200%] animate-wave-scroll"
-            style={{ animationDuration: '36s' }}
+            className={`absolute bottom-[4%] left-0 flex h-full w-[200%] ${shouldReduceMotion ? '' : 'animate-wave-scroll'}`}
+            style={shouldReduceMotion ? undefined : { animationDuration: '36s' }}
           >
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
@@ -42,8 +45,8 @@ export default function Hero() {
           </div>
 
           <div
-            className="absolute bottom-[2%] left-0 flex h-[88%] w-[200%] animate-wave-scroll"
-            style={{ animationDuration: '27s' }}
+            className={`absolute bottom-[2%] left-0 flex h-[88%] w-[200%] ${shouldReduceMotion ? '' : 'animate-wave-scroll'}`}
+            style={shouldReduceMotion ? undefined : { animationDuration: '27s' }}
           >
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
@@ -66,8 +69,8 @@ export default function Hero() {
           </div>
 
           <div
-            className="absolute bottom-0 left-0 flex h-[78%] w-[200%] animate-wave-scroll"
-            style={{ animationDuration: '20s' }}
+            className={`absolute bottom-0 left-0 flex h-[78%] w-[200%] ${shouldReduceMotion ? '' : 'animate-wave-scroll'}`}
+            style={shouldReduceMotion ? undefined : { animationDuration: '20s' }}
           >
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
@@ -109,7 +112,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            transition={entranceTransition({ duration: 0.6, ease: 'easeOut' })}
             className="text-[#7c7f87] text-sm uppercase tracking-[0.35em] mb-6 font-medium"
           >
             {t.hero.tagline}
@@ -119,7 +122,7 @@ export default function Hero() {
           <motion.h1
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.8, ease: 'easeOut' }}
+            transition={entranceTransition({ delay: 0.1, duration: 0.8, ease: 'easeOut' })}
             className="text-[#17181c] text-[52px] sm:text-[64px] lg:text-[84px] font-bold leading-[0.95] tracking-[-0.05em] mb-6 max-w-[820px]"
           >
             <span className="block text-text-main">
@@ -135,7 +138,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            transition={entranceTransition({ delay: 0.2, duration: 0.8 })}
             className="text-[#7c7f87] text-[17px] sm:text-[19px] leading-[1.8] max-w-[620px] mb-7"
           >
             {t.hero.subtitle}
@@ -145,7 +148,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
+            transition={entranceTransition({ delay: 0.3, duration: 0.5 })}
             className={`mt-2 flex justify-center ${isArabic ? 'md:justify-end' : 'md:justify-start'}`}
           >
             <div className="group relative">

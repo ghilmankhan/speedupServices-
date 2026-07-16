@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Facebook, Linkedin, Menu, X, Phone, ArrowRight } from 'lucide-react';
 import Logo from './Logo';
 import { useLanguage } from '../i18n';
@@ -55,6 +55,8 @@ function LanguageSwitch({
   onToggle,
   ariaLabel,
 }: LanguageSwitchProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <button
       type="button"
@@ -84,7 +86,7 @@ function LanguageSwitch({
       <motion.div
         className="absolute left-[4px] top-[4px] z-10 flex h-[48px] w-[48px] items-center justify-center rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.10)]"
         animate={{ x: language === 'ar' ? 60 : 0 }}
-        transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+        transition={shouldReduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 320, damping: 26 }}
       >
         <span className="text-[18px] font-semibold text-primary">
           {language.toUpperCase()}
@@ -109,6 +111,8 @@ function ContactCTA({
   label,
   compact = false,
 }: ContactCTAProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   if (compact) {
     return (
       <motion.a
@@ -147,21 +151,24 @@ function ContactCTA({
         {phoneDisplay}
       </span>
 
-      <motion.div
-        className="absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-        animate={{ x: ['0%', '250%'] }}
-        transition={{
-          duration: 2.8,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-      />
+      {!shouldReduceMotion && (
+        <motion.div
+          className="absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          animate={{ x: ['0%', '250%'] }}
+          transition={{
+            duration: 2.8,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        />
+      )}
     </motion.a>
   );
 }
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
   const { language, isArabic, setLanguage, t } = useLanguage();
   const { phoneDisplay, phoneHref } = useRegionDetection();
   const accessibilityText = t.navbar.accessibility;
@@ -295,7 +302,7 @@ export default function Navbar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
               className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-md"
             >
               <div className="px-8 py-6 space-y-6">

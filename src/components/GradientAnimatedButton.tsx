@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 
 interface GradientAnimatedButtonProps {
   children: React.ReactNode;
@@ -16,15 +16,21 @@ export default function GradientAnimatedButton({
   type = 'button',
   disabled = false
 }: GradientAnimatedButtonProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
+      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
       className={`relative inline-block group ${className}`}
     >
       {/* Animated Border Layer */}
       <div className="absolute -inset-[1px] rounded-full bg-white/20" />
-      <div className="absolute -inset-[1px] rounded-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.8)_50%,transparent_100%)] bg-[length:200%_200%] animate-[border-flow_3s_linear_infinite]" />
+      <div
+        className={`absolute -inset-[1px] rounded-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.8)_50%,transparent_100%)] bg-[length:200%_200%] ${
+          shouldReduceMotion ? '' : 'animate-[border-flow_3s_linear_infinite]'
+        }`}
+      />
       
       {/* Inner Gradient Button */}
       <button

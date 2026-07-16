@@ -494,6 +494,10 @@ export default function QuoteForm() {
                 alt={t.quoteForm.imageAlt}
                 className="w-full h-full object-cover grayscale"
                 referrerPolicy="no-referrer"
+                loading="lazy"
+                decoding="async"
+                width={1200}
+                height={1500}
               />
               <div className="absolute bottom-10 left-10 right-10 bg-primary/80 backdrop-blur-md p-8 rounded-2xl text-white text-center">
                 <p className="text-lg font-medium mb-2">{t.quoteForm.cardTagline}</p>

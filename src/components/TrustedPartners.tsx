@@ -79,6 +79,8 @@ export default function TrustedPartners() {
                       src={company.logo}
                       alt={company.name[isArabic ? 'ar' : 'en']}
                       className={`relative z-10 ${company.logoClass} transition-all duration-500 group-hover:scale-105`}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                 </div>

@@ -46,18 +46,18 @@ export default function WhyChooseUs() {
           >
             <div className="space-y-4 pt-12">
               <div className="aspect-[4/5] rounded-3xl overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800" alt="Electrical Maintenance" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800" alt="Electrical Maintenance" className="w-full h-full object-cover" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
               </div>
               <div className="aspect-square rounded-3xl overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=800" alt="Commercial Cleaning" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=800" alt="Commercial Cleaning" className="w-full h-full object-cover" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
               </div>
             </div>
             <div className="space-y-4">
               <div className="aspect-square rounded-3xl overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800" alt="Warehouse Operations" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800" alt="Warehouse Operations" className="w-full h-full object-cover" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
               </div>
               <div className="aspect-[4/5] rounded-3xl overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800" alt="Building Maintenance" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800" alt="Building Maintenance" className="w-full h-full object-cover" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
               </div>
             </div>
           </motion.div>

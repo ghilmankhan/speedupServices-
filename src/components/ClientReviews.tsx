@@ -55,20 +55,23 @@ export default function ClientReviews() {
         x: 0,
         y: 0,
         rotate: 0,
-        shadow: '0 18px 34px rgba(140,198,63,0.12)',
+        blur: 0,
+        shadow:
+          '0 1px 2px rgba(15,23,42,0.04), 0 8px 16px rgba(15,23,42,0.05), 0 20px 40px rgba(140,198,63,0.08)',
       };
     }
 
     if (diff === 1 || diff === length - 1) {
       const direction = diff === 1 ? 1 : -1;
       return {
-        opacity: 0.14,
+        opacity: 0.05,
         zIndex: 20,
         scale: 0.86,
         x: direction * 230 * directionFactor,
         y: 16,
         rotate: direction * 2 * directionFactor,
-        shadow: '0 10px 22px rgba(0,0,0,0.03)',
+        blur: 2,
+        shadow: '0 10px 22px rgba(15,23,42,0.05)',
       };
     }
 
@@ -79,6 +82,7 @@ export default function ClientReviews() {
       x: 0,
       y: 0,
       rotate: 0,
+      blur: 2,
       shadow: 'none',
       pointerEvents: 'none',
     };
@@ -125,6 +129,7 @@ export default function ClientReviews() {
                     x: styles.x,
                     y: styles.y ?? 0,
                     rotate: styles.rotate,
+                    filter: `blur(${styles.blur}px) saturate(${styles.blur ? 0.7 : 1})`,
                   }}
                   transition={{ duration: 0.65, ease: [0.4, 0, 0.2, 1] }}
                   style={{ zIndex: styles.zIndex, boxShadow: styles.shadow }}
@@ -135,12 +140,13 @@ export default function ClientReviews() {
                     }`}
                   >
                     <div className="absolute left-1/2 bottom-0 h-16 w-[70%] -translate-x-1/2 rounded-full bg-primary/[0.05] blur-2xl opacity-60 pointer-events-none" />
-                    <div className={`relative z-10 flex items-center justify-between mb-4 ${isArabic ? 'text-right' : 'text-left'}`}>
-                      <span className="text-[14px] sm:text-[15px] font-semibold leading-tight tracking-[-0.01em] text-text-main max-w-[80%]">{item.companyName[isArabic ? 'ar' : 'en']}</span>
+                    <Quote
+                      size={88}
+                      className={`absolute ${isArabic ? 'left-6 rotate-180' : 'right-6'} top-4 text-primary/[0.09] pointer-events-none`}
+                    />
+                    <div className={`relative z-10 flex items-center justify-between mb-5 ${isArabic ? 'text-right' : 'text-left'}`}>
+                      <span className="text-[15px] sm:text-[16px] font-bold leading-tight tracking-[-0.015em] text-text-main max-w-[80%]">{item.companyName[isArabic ? 'ar' : 'en']}</span>
                       <span className="text-xs text-text-muted">• • •</span>
-                    </div>
-                    <div className={`relative z-10 mb-4 text-2xl text-primary/8 ${isArabic ? 'text-right' : 'text-left'}`}>
-                      <Quote size={42} className={isArabic ? 'rotate-180' : ''} />
                     </div>
                     <div className="relative z-10 flex-1 mb-4">
                       <p
@@ -156,7 +162,7 @@ export default function ClientReviews() {
                         isArabic ? 'flex-row-reverse text-right' : 'text-left'
                       }`}
                     >
-                      <div className="h-12 w-12 flex-shrink-0 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold sm:h-14 sm:w-14">{item.clientName[isArabic ? 'ar' : 'en'].charAt(0)}</div>
+                      <div className="h-11 w-11 flex-shrink-0 rounded-full bg-primary/[0.08] ring-1 ring-primary/15 flex items-center justify-center text-primary/80 font-medium text-sm sm:h-12 sm:w-12">{item.clientName[isArabic ? 'ar' : 'en'].charAt(0)}</div>
                       <div className="min-w-0 flex-1">
                         <p className="font-semibold text-[16px] sm:text-[18px] leading-tight text-text-main">{item.clientName[isArabic ? 'ar' : 'en']}</p>
                         <p className="text-[13px] sm:text-sm leading-5 text-text-muted mt-1 max-w-[220px]">{item.clientTitle[isArabic ? 'ar' : 'en']}</p>
@@ -220,12 +226,8 @@ export default function ClientReviews() {
               />
             ))}
           </div>
-
-          <p
-            className="mt-1 text-xs font-medium tracking-[0.18em] uppercase text-text-muted/70"
-            aria-live="polite"
-          >
-            {String(activeIndex + 1).padStart(2, '0')} / {String(length).padStart(2, '0')}
+          <p className="sr-only" aria-live="polite">
+            Testimonial {activeIndex + 1} of {length}
           </p>
         </div>
       </div>
