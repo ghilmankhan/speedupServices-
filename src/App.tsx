@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import TrustedPartners from './components/TrustedPartners';
-import About from './components/About';
-import Services from './components/Services';
-import Industries from './components/Industries';
-import WhyChooseUs from './components/WhyChooseUs';
-import ClientReviews from './components/ClientReviews';
-import Compliance from './components/Compliance';
-import QuoteForm from './components/QuoteForm';
-import Footer from './components/Footer';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LanguageProvider } from './i18n';
+
+const TrustedPartners = lazy(() => import('./components/TrustedPartners'));
+const About = lazy(() => import('./components/About'));
+const Services = lazy(() => import('./components/Services'));
+const Industries = lazy(() => import('./components/Industries'));
+const WhyChooseUs = lazy(() => import('./components/WhyChooseUs'));
+const ClientReviews = lazy(() => import('./components/ClientReviews'));
+const Compliance = lazy(() => import('./components/Compliance'));
+const QuoteForm = lazy(() => import('./components/QuoteForm'));
+const Footer = lazy(() => import('./components/Footer'));
 
 // Main Application Component
 export default function App() {
@@ -25,34 +26,38 @@ export default function App() {
           <ErrorBoundary sectionName="Hero">
             <Hero />
           </ErrorBoundary>
-          <ErrorBoundary sectionName="About">
-            <About />
-          </ErrorBoundary>
-          <ErrorBoundary sectionName="Services">
-            <Services />
-          </ErrorBoundary>
-          <ErrorBoundary sectionName="Industries">
-            <Industries />
-          </ErrorBoundary>
-          <ErrorBoundary sectionName="WhyChooseUs">
-            <WhyChooseUs />
-          </ErrorBoundary>
-          <ErrorBoundary sectionName="TrustedPartners">
-            <TrustedPartners />
-          </ErrorBoundary>
-          <ErrorBoundary sectionName="ClientReviews">
-            <ClientReviews />
-          </ErrorBoundary>
-          <ErrorBoundary sectionName="Compliance">
-            <Compliance />
-          </ErrorBoundary>
-          <ErrorBoundary sectionName="QuoteForm">
-            <QuoteForm />
-          </ErrorBoundary>
+          <Suspense fallback={null}>
+            <ErrorBoundary sectionName="About">
+              <About />
+            </ErrorBoundary>
+            <ErrorBoundary sectionName="Services">
+              <Services />
+            </ErrorBoundary>
+            <ErrorBoundary sectionName="Industries">
+              <Industries />
+            </ErrorBoundary>
+            <ErrorBoundary sectionName="WhyChooseUs">
+              <WhyChooseUs />
+            </ErrorBoundary>
+            <ErrorBoundary sectionName="TrustedPartners">
+              <TrustedPartners />
+            </ErrorBoundary>
+            <ErrorBoundary sectionName="ClientReviews">
+              <ClientReviews />
+            </ErrorBoundary>
+            <ErrorBoundary sectionName="Compliance">
+              <Compliance />
+            </ErrorBoundary>
+            <ErrorBoundary sectionName="QuoteForm">
+              <QuoteForm />
+            </ErrorBoundary>
+          </Suspense>
         </main>
-        <ErrorBoundary sectionName="Footer">
-          <Footer />
-        </ErrorBoundary>
+        <Suspense fallback={null}>
+          <ErrorBoundary sectionName="Footer">
+            <Footer />
+          </ErrorBoundary>
+        </Suspense>
       </div>
     </LanguageProvider>
   );

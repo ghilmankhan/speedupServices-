@@ -43,6 +43,8 @@ const allowedServices = new Set([
 
 const rateLimitStore = new Map<string, number[]>();
 
+let transporter: nodemailer.Transporter | null = null;
+
 const escapeHtml = (value: string): string =>
   value.replace(/[&<>"']/g, character => ({
     '&': '&amp;',
@@ -52,18 +54,24 @@ const escapeHtml = (value: string): string =>
     "'": '&#039;',
   })[character] || character);
 
-const getTransporter = () => {
+const getTransporter = (): nodemailer.Transporter => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     throw new Error('Email credentials are not configured.');
   }
 
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      pool: true,
+      maxConnections: 3,
+    });
+  }
+
+  return transporter;
 };
 
 const getReceiverEmail = (): string => {
@@ -98,6 +106,18 @@ const checkRateLimit = (clientIp: string): boolean => {
   rateLimitStore.set(clientIp, recentRequests);
   return true;
 };
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, timestamps] of rateLimitStore) {
+    const stillActive = timestamps.filter(timestamp => now - timestamp < RATE_LIMIT_WINDOW_MS);
+    if (stillActive.length === 0) {
+      rateLimitStore.delete(ip);
+    } else {
+      rateLimitStore.set(ip, stillActive);
+    }
+  }
+}, RATE_LIMIT_WINDOW_MS).unref();
 
 const normalizePayload = (body: Partial<ContactRequestBody>) => ({
   firstName: String(body.firstName || '').trim(),
@@ -226,18 +246,10 @@ router.post('/contact', async (req: Request, res: Response) => {
       });
     }
 
-    const transporter = getTransporter();
+    const mailer = getTransporter();
     const receiverEmail = getReceiverEmail();
 
-    try {
-      await transporter.verify();
-      console.log('SMTP server ready');
-    } catch (smtpError) {
-      console.error('SMTP verification failed:', smtpError);
-      throw smtpError;
-    }
-
-    await transporter.sendMail({
+    await mailer.sendMail({
       from: process.env.EMAIL_USER,
       to: receiverEmail,
       replyTo: data.email,

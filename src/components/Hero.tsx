@@ -1,34 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import GradientAnimatedButton from './GradientAnimatedButton';
 import { useLanguage } from '../i18n';
 
 export default function Hero() {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const { isArabic, t } = useLanguage();
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { innerWidth, innerHeight } = window;
-    setMouse({
-      x: (e.clientX / innerWidth - 0.5) * 30,
-      y: (e.clientY / innerHeight - 0.5) * 30,
-    });
-  };
 
   return (
     <section
       id="home"
-      onMouseMove={handleMouseMove}
       className="bg-site-hero relative min-h-[92vh] flex items-center pt-10 lg:pt-16 overflow-hidden"
     >
       {/* ================= BACKGROUND ================= */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-x-0 bottom-[-2%] h-[42%] overflow-hidden lg:h-[46%]">
-          <motion.div
-            className="absolute bottom-[4%] left-0 flex h-full w-[200%]"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{ duration: 36, repeat: Infinity, ease: 'linear' }}
+          <div
+            className="absolute bottom-[4%] left-0 flex h-full w-[200%] animate-wave-scroll"
+            style={{ animationDuration: '36s' }}
           >
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
@@ -50,12 +39,11 @@ export default function Hero() {
                 className="blur-[1px]"
               />
             </svg>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="absolute bottom-[2%] left-0 flex h-[88%] w-[200%]"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{ duration: 27, repeat: Infinity, ease: 'linear' }}
+          <div
+            className="absolute bottom-[2%] left-0 flex h-[88%] w-[200%] animate-wave-scroll"
+            style={{ animationDuration: '27s' }}
           >
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
@@ -75,12 +63,11 @@ export default function Hero() {
                 fill="url(#waveMiddleGradient)"
               />
             </svg>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="absolute bottom-0 left-0 flex h-[78%] w-[200%]"
-            animate={{ x: ['0%', '-50%'] }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          <div
+            className="absolute bottom-0 left-0 flex h-[78%] w-[200%] animate-wave-scroll"
+            style={{ animationDuration: '20s' }}
           >
             <svg viewBox="0 0 1200 420" preserveAspectRatio="none" className="h-full w-1/2">
               <defs>
@@ -100,7 +87,7 @@ export default function Hero() {
                 fill="url(#waveFrontGradient)"
               />
             </svg>
-          </motion.div>
+          </div>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-[#eef4e3]/20 to-[#f3f6ef]" />
