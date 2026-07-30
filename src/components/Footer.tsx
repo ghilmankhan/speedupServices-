@@ -50,7 +50,7 @@ export default function Footer() {
               </li>
               <li>
                 <a 
-                  href="tel:+918108102609"
+                  href="tel:+966582351740"
                   className="hover:text-primary transition-colors duration-300 cursor-pointer"
                 >
                   {t.footer.contact.call}

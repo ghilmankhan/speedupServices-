@@ -2,7 +2,7 @@ export const footer = {
   "en": {
     "footer": {
       "brandTitle": "Speedup Services",
-      "brandSubtitle": "Integrated Facility Management & Manpower Solutions",
+      "brandSubtitle": "Integrated Business Solutions",
       "country": "Kingdom of Saudi Arabia",
       "quickLinksTitle": "Quick Links",
       "quickLinks": [
@@ -27,7 +27,7 @@ export const footer = {
       "contact": {
         "general": "General: info@speedupservices.com",
         "careers": "Careers: hr@speedupservices.com",
-        "call": "Call us: +91 81081 02609",
+        "call": "Call us: +966 58 235 1740",
         "address": "Address: Kingdom of Saudi Arabia"
       },
       "followTitle": "Follow Us",
@@ -37,7 +37,7 @@ export const footer = {
   "ar": {
     "footer": {
       "brandTitle": "سبيد أب سيرفيسز",
-      "brandSubtitle": "حلول متكاملة لإدارة المرافق وتوفير القوى العاملة",
+      "brandSubtitle": "حلول أعمال متكاملة",
       "country": "المملكة العربية السعودية",
       "quickLinksTitle": "روابط سريعة",
       "quickLinks": [
@@ -62,7 +62,7 @@ export const footer = {
       "contact": {
         "general": "عام: info@speedupservices.com",
         "careers": "الوظائف: hr@speedupservices.com",
-        "call": "اتصل بنا: +91 81081 02609",
+        "call": "اتصل بنا: +966 58 235 1740",
         "address": "العنوان: المملكة العربية السعودية"
       },
       "followTitle": "تابعنا",

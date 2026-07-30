@@ -27,7 +27,7 @@ export const navbar = {
         "en": "EN",
         "ar": "AR"
       },
-      "callLabel": "Call +91 8108102609",
+      "callLabel": "Call +966 58 235 1740",
       "accessibility": {
         "toggleMenu": "Toggle mobile menu",
         "facebook": "Visit our Facebook page",
@@ -74,7 +74,7 @@ export const navbar = {
         "en": "EN",
         "ar": "AR"
       },
-      "callLabel": "اتصل على +91 8108102609",
+      "callLabel": "اتصل على +966 58 235 1740",
       "accessibility": {
         "toggleMenu": "فتح أو إغلاق القائمة",
         "facebook": "زيارة صفحة فيسبوك",
